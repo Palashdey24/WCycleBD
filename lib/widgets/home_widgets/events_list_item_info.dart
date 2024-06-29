@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wcycle_bd/model/littered_list_model.dart';
-import 'package:wcycle_bd/utilts/variable.dart';
 
 class EventsListItemInfo extends StatelessWidget {
   const EventsListItemInfo({super.key, required this.ltList});

@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:gap/gap.dart';
 import 'package:wcycle_bd/data/littered_list_data.dart';
-import 'package:wcycle_bd/data/recycable_price_data.dart';
 import 'package:wcycle_bd/widgets/home_widgets/carousel_card.dart';
 import 'package:wcycle_bd/widgets/home_widgets/event_section.dart';
-import 'package:wcycle_bd/widgets/home_widgets/littered_list_item.dart';
 import 'package:wcycle_bd/widgets/home_widgets/littered_section.dart';
-import 'package:wcycle_bd/widgets/home_widgets/recyclable_list_item.dart';
 import 'package:wcycle_bd/widgets/home_widgets/recyclable_price_section.dart';
 
 import 'package:wcycle_bd/widgets/home_widgets/reuseable_container.dart';

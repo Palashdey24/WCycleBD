@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wcycle_bd/data/littered_list_data.dart';
 import 'package:wcycle_bd/widgets/home_widgets/events_list_item.dart';
-import 'package:wcycle_bd/widgets/home_widgets/littered_list_item.dart';
 import 'package:wcycle_bd/widgets/home_widgets/section_top_bar.dart';
 
 class EventSection extends StatelessWidget {

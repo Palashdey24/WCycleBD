@@ -22,7 +22,7 @@ class CarouselCard extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              Gap(5),
+              const Gap(5),
               Text(
                   style:
                       GoogleFonts.spectral(color: Colors.black, fontSize: 12),

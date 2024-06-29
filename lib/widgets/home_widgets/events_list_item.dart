@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 import 'package:wcycle_bd/model/littered_list_model.dart';
 import 'package:wcycle_bd/widgets/home_widgets/even_date_show.dart';
 import 'package:wcycle_bd/widgets/home_widgets/events_list_item_info.dart';
-import 'package:wcycle_bd/widgets/home_widgets/littered_list_item_info.dart';
 
 class EventsListItem extends StatelessWidget {
   const EventsListItem({super.key, required this.ltListModel});

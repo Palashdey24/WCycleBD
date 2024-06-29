@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "688300191313",
+    "project_id": "wcyclebd",
+    "storage_bucket": "wcyclebd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688300191313:android:d61d6fd797e152e232d270",
+        "android_client_info": {
+          "package_name": "com.example.wcycle_bd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "688300191313-4hm4u0jm72ajetc1n2m43neuh7jkokfb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wcycle_bd",
+            "certificate_hash": "a7a9f5cf75d11394be70c6fa96acd76de86f98ce"
+          }
+        },
+        {
+          "client_id": "688300191313-iljijesf14qacds65c0k9bd4j1971skc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC70GVg_7Y6vvxbbSMTc3zBJZ21SQecF5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "688300191313-iljijesf14qacds65c0k9bd4j1971skc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "688300191313-2id1ovg8rd94eqv2len035ujtsrnhm8i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wcycleBd"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
