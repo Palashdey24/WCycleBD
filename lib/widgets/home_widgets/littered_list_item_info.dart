@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wcycle_bd/model/littered_list_model.dart';
-import 'package:wcycle_bd/utilts/variable.dart';
+import 'package:wcycle_bd/utilts/global_value.dart';
 
 class LitteredListItemInfo extends StatelessWidget {
   const LitteredListItemInfo({super.key, required this.ltList});

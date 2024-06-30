@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wcycle_bd/model/recyclable_list_model.dart';
-import 'package:wcycle_bd/utilts/variable.dart';
+import 'package:wcycle_bd/utilts/global_value.dart';
 
 class RecyclableListItemInfo extends StatelessWidget {
   const RecyclableListItemInfo({super.key, required this.rcListModel});

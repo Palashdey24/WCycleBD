@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wcycle_bd/screen/credentials_screen.dart';
-import 'package:wcycle_bd/utilts/variable.dart';
+import 'package:wcycle_bd/screen/home_screen.dart';
+import 'package:wcycle_bd/screen/splash_screen.dart';
+import 'package:wcycle_bd/utilts/global_value.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:wcycle_bd/widgets/loading_widget.dart';
 import 'firebase_options.dart';
 
 final colorSch =
@@ -14,9 +17,11 @@ _intilizeFirebase() async {
   );
 }
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  _intilizeFirebase();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -33,7 +38,7 @@ class MyApp extends StatelessWidget {
         primaryColor: kDefaultColor,
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
       ),
-      home: const CredentialScreen(),
+      home: const SplashScreen(),
     );
   }
 }

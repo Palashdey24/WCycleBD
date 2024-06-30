@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:wcycle_bd/widgets/credentials_signin_with_google.dart';
-import 'package:wcycle_bd/widgets/reg_form.dart';
-import 'package:wcycle_bd/widgets/signin_form.dart';
+import 'package:wcycle_bd/widgets/credentials_widgets/credentials_signin_with_google.dart';
+import 'package:wcycle_bd/widgets/credentials_widgets/reg_form.dart';
+import 'package:wcycle_bd/widgets/credentials_widgets/signin_form.dart';
 
 class AnimateCredentials extends StatefulWidget {
   const AnimateCredentials({super.key});

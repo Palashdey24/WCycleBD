@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wcycle_bd/path/signin_tri_path_left.dart';
-import 'package:wcycle_bd/widgets/animate_credentials.dart';
+import 'package:wcycle_bd/widgets/credentials_widgets/animate_credentials.dart';
 
 class CredentialScreen extends StatelessWidget {
   const CredentialScreen({super.key});

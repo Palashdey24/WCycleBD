@@ -1,29 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/screen/home_screen.dart';
+import 'package:wcycle_bd/utilts/global_value.dart';
 
-class CredentialsSigninWithGoogle extends StatefulWidget {
+class CredentialsSigninWithGoogle extends StatelessWidget {
   const CredentialsSigninWithGoogle({super.key});
-
-  @override
-  State<CredentialsSigninWithGoogle> createState() =>
-      _CredentialsSigninWithGoogleState();
-}
-
-class _CredentialsSigninWithGoogleState
-    extends State<CredentialsSigninWithGoogle> {
-  void _onSignWithGoogle() async {
-    final googleSignIn = await signInWithGoogle();
-
-    if (googleSignIn != null) {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ));
-    }
-  }
 
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
@@ -40,14 +23,32 @@ class _CredentialsSigninWithGoogleState
     );
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    return await firebaseAuth.signInWithCredential(credential);
   }
 
   @override
   Widget build(BuildContext context) {
+    void onSignWithGoogle() async {
+      DialogsHelper().showProgressBar(context);
+      final googleSignIn = await signInWithGoogle();
+
+      if (googleSignIn != null) {
+        if (!context.mounted) {
+          return;
+        } else {
+          Navigator.pop(context);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ));
+        }
+      }
+    }
+
     return ElevatedButton.icon(
       onPressed: () {
-        _onSignWithGoogle();
+        onSignWithGoogle();
       },
       style: ElevatedButton.styleFrom(
           shape: const RoundedRectangleBorder(

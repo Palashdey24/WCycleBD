@@ -1,10 +1,12 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:wcycle_bd/pages/account_page.dart';
 import 'package:wcycle_bd/pages/home_page.dart';
 import 'package:wcycle_bd/pages/news_page.dart';
 import 'package:wcycle_bd/pages/order_page.dart';
-import 'package:wcycle_bd/utilts/variable.dart';
+import 'package:wcycle_bd/screen/credentials_screen.dart';
+import 'package:wcycle_bd/utilts/global_value.dart';
 import 'package:wcycle_bd/widgets/nav_icon_item.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -121,7 +123,14 @@ class _HomeScreenState extends State<HomeScreen> {
               isSelect: onNavAcc,
               curves: Curves.easeInCubic,
               navIcon: Icons.person_2_rounded,
-              navFn: () {
+              navFn: () async {
+                await firebaseAuth.signOut();
+                await GoogleSignIn().signOut();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CredentialScreen(),
+                    ));
                 setState(() {
                   onNavHm = false;
                   onNavAcc = true;

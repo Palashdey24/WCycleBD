@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:wcycle_bd/screen/home_screen.dart';
+import 'package:wcycle_bd/helper/dialogs_helper.dart';
+import 'package:wcycle_bd/utilts/global_value.dart';
 import 'package:wcycle_bd/widgets/card_text_fields.dart';
 import 'package:wcycle_bd/widgets/form_text_texts.dart';
 
@@ -18,21 +20,26 @@ class _SigninFormState extends State<SigninForm> {
 
   String? password;
 
-  void saveFn() {
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ));
+  void saveFn() async {
+    FocusScope.of(context).unfocus();
     _formKeyLog.currentState!.validate();
     if (_formKeyLog.currentState!.validate()) {
+      DialogsHelper().showProgressBar(context);
       _formKeyLog.currentState!.save();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(emailTxt!),
-        ),
-      );
+      try {
+        final credentials = await firebaseAuth.signInWithEmailAndPassword(
+            email: emailTxt!, password: password!);
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (error) {
+        if (!context.mounted) {
+          return;
+        }
+        Navigator.pop(context);
+        DialogsHelper().removeMessage(context);
+        DialogsHelper()
+            .showMessage(context, error.message ?? "Authentication Failed");
+      }
     }
   }
 
@@ -45,8 +52,6 @@ class _SigninFormState extends State<SigninForm> {
           CardTextFields(
             cardWidegts: FormTextTexts(
               txtInType: TextInputType.emailAddress,
-              atCorrect: false,
-              enSuggest: false,
               labelTxt: "Email",
               hint: "Please enter a valid email",
               icons: Icons.email,
@@ -68,8 +73,6 @@ class _SigninFormState extends State<SigninForm> {
           CardTextFields(
               cardWidegts: FormTextTexts(
             txtInType: TextInputType.visiblePassword,
-            atCorrect: false,
-            enSuggest: false,
             labelTxt: "Password",
             hint: "Please enter at last 8 char Password",
             icons: Icons.password_rounded,
