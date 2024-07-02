@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
-import 'package:wcycle_bd/utilts/global_value.dart';
 import 'package:wcycle_bd/widgets/card_text_fields.dart';
 import 'package:wcycle_bd/widgets/form_text_texts.dart';
 
@@ -28,8 +28,9 @@ class _SigninFormState extends State<SigninForm> {
       _formKeyLog.currentState!.save();
 
       try {
-        final credentials = await firebaseAuth.signInWithEmailAndPassword(
-            email: emailTxt!, password: password!);
+        final credentials = await Apis()
+            .firebaseAuth
+            .signInWithEmailAndPassword(email: emailTxt!, password: password!);
         Navigator.pop(context);
       } on FirebaseAuthException catch (error) {
         if (!context.mounted) {

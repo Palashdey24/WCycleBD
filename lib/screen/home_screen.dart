@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:core';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:wcycle_bd/pages/account_page.dart';
@@ -7,6 +9,7 @@ import 'package:wcycle_bd/pages/news_page.dart';
 import 'package:wcycle_bd/pages/order_page.dart';
 import 'package:wcycle_bd/screen/credentials_screen.dart';
 import 'package:wcycle_bd/utilts/global_value.dart';
+import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/widgets/nav_icon_item.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -124,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
               curves: Curves.easeInCubic,
               navIcon: Icons.person_2_rounded,
               navFn: () async {
-                await firebaseAuth.signOut();
+                await Apis().firebaseAuth.signOut();
                 await GoogleSignIn().signOut();
                 Navigator.pushReplacement(
                     context,

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wcycle_bd/screen/credentials_screen.dart';
-import 'package:wcycle_bd/screen/home_screen.dart';
 import 'package:wcycle_bd/screen/splash_screen.dart';
 import 'package:wcycle_bd/utilts/global_value.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:wcycle_bd/widgets/loading_widget.dart';
 import 'firebase_options.dart';
 
 final colorSch =

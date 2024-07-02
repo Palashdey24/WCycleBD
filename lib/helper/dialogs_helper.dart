@@ -9,6 +9,7 @@ class DialogsHelper {
         style: const TextStyle(color: Colors.white),
       ),
       backgroundColor: Colors.black,
+      behavior: SnackBarBehavior.floating,
     ));
   }
 

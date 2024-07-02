@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/screen/home_screen.dart';
-import 'package:wcycle_bd/utilts/global_value.dart';
 
 class CredentialsSigninWithGoogle extends StatelessWidget {
   const CredentialsSigninWithGoogle({super.key});
@@ -23,27 +23,60 @@ class CredentialsSigninWithGoogle extends StatelessWidget {
     );
 
     // Once signed in, return the UserCredential
-    return await firebaseAuth.signInWithCredential(credential);
+    return await Apis().firebaseAuth.signInWithCredential(credential);
   }
 
   @override
   Widget build(BuildContext context) {
-    void onSignWithGoogle() async {
+    void onSignWithGoogle() {
       DialogsHelper().showProgressBar(context);
-      final googleSignIn = await signInWithGoogle();
-
-      if (googleSignIn != null) {
+      //final googleSignIn = await signInWithGoogle();
+      signInWithGoogle().then(
+        (value) async {
+          Navigator.pop(context);
+          if ((await Apis().userExist())) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomeScreen(),
+                ));
+            return;
+          } else {
+            await Apis().createGoogleUser().then((onValue) {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ));
+              return;
+            });
+          }
+        },
+      );
+/*      if (googleSignIn.credential != null) {
         if (!context.mounted) {
           return;
         } else {
           Navigator.pop(context);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomeScreen(),
-              ));
+          if ((await Apis().userExist())) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomeScreen(),
+                ));
+            return;
+          } else {
+            await Apis().createGoogleUser().then((onValue) {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ));
+              return;
+            });
+          }
         }
-      }
+      }*/
     }
 
     return ElevatedButton.icon(

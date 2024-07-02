@@ -1,7 +1,10 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/screen/credentials_screen.dart';
 import 'package:wcycle_bd/screen/home_screen.dart';
-import 'package:wcycle_bd/utilts/global_value.dart';
 import 'package:wcycle_bd/widgets/loading_widget.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -10,7 +13,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: firebaseAuth.authStateChanges(),
+      stream: Apis().firebaseAuth.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SizedBox(

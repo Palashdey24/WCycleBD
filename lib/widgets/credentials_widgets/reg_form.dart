@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
-import 'package:wcycle_bd/utilts/global_value.dart';
 import 'package:wcycle_bd/widgets/card_text_fields.dart';
 import 'package:wcycle_bd/widgets/form_text_texts.dart';
 
@@ -16,11 +15,14 @@ class RegForm extends StatefulWidget {
 
 class _RegFormState extends State<RegForm> {
   final _formKeyReg = GlobalKey<FormState>();
+
   String? userEmailTxt;
-
   String? userPassword;
-
   int? userNumber;
+  String? fullName;
+  String? phoneNumber;
+  String? birthDate;
+  String? gender;
 
   void saveFn() async {
     FocusScope.of(context).unfocus();
@@ -30,8 +32,19 @@ class _RegFormState extends State<RegForm> {
       _formKeyReg.currentState!.save();
 
       try {
-        final credentials = await firebaseAuth.createUserWithEmailAndPassword(
-            email: userEmailTxt!, password: userPassword!);
+        final credentials = await Apis()
+            .firebaseAuth
+            .createUserWithEmailAndPassword(
+                email: userEmailTxt!, password: userPassword!);
+
+        Apis().setUser({
+          "userName": fullName,
+          "email": userEmailTxt,
+          "phoneNumber": phoneNumber,
+          "birthDate": birthDate,
+          "gender": gender,
+          "img_uri": "N/A",
+        });
 
         if (!context.mounted) return;
         Navigator.pop(context);
@@ -58,7 +71,9 @@ class _RegFormState extends State<RegForm> {
               hint: "Please enter your Name",
               icons: Icons.text_rotation_angleup_rounded,
               iconCol: Colors.blueGrey,
-              onSave: (value) {},
+              onSave: (value) {
+                fullName = value;
+              },
               vaildator: (value) {
                 if (value == null ||
                     value.trim().isEmpty ||
@@ -107,7 +122,9 @@ class _RegFormState extends State<RegForm> {
               }
               return null;
             },
-            onSave: (value) {},
+            onSave: (value) {
+              phoneNumber = value;
+            },
           )),
           CardTextFields(
               cardWidegts: FormTextTexts(
@@ -154,7 +171,9 @@ class _RegFormState extends State<RegForm> {
                 hint: "Please enter BirthDate",
                 icons: Icons.email,
                 iconCol: Colors.blueGrey,
-                onSave: (value) {},
+                onSave: (value) {
+                  birthDate = value == "" ? "N/A" : value;
+                },
                 vaildator: (value) {
                   return null;
                 },
@@ -171,7 +190,9 @@ class _RegFormState extends State<RegForm> {
               return null;
             },
             obscure: true,
-            onSave: (value) {},
+            onSave: (value) {
+              gender = value == "" ? "N/A" : value;
+            },
           )),
           const Gap(10),
           ElevatedButton(onPressed: saveFn, child: const Text("Save")),
