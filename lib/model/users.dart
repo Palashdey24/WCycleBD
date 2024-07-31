@@ -24,13 +24,13 @@ class Users {
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['phoneNumber'] = phoneNumber;
-    _data['gender'] = gender;
-    _data['img_uri'] = imgUri;
-    _data['userName'] = userName;
-    _data['birthDate'] = birthDate;
-    _data['email'] = email;
-    return _data;
+    final data = <String, dynamic>{};
+    data['phoneNumber'] = phoneNumber;
+    data['gender'] = gender;
+    data['img_uri'] = imgUri;
+    data['userName'] = userName;
+    data['birthDate'] = birthDate;
+    data['email'] = email;
+    return data;
   }
 }

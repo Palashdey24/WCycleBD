@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/widgets/credentials_widgets/credentials_signin_with_google.dart';
 import 'package:wcycle_bd/widgets/credentials_widgets/reg_form.dart';
 import 'package:wcycle_bd/widgets/credentials_widgets/signin_form.dart';
@@ -32,14 +33,6 @@ class _AnimateCredentialsState extends State<AnimateCredentials> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const CircleAvatar(
-            backgroundColor: Colors.grey,
-            radius: 70,
-            child: Icon(
-              Icons.people,
-              size: 100,
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: AnimatedCrossFade(
@@ -50,7 +43,7 @@ class _AnimateCredentialsState extends State<AnimateCredentials> {
                     : CrossFadeState.showSecond,
                 duration: const Duration(seconds: 1)),
           ),
-          const Gap(10),
+          const Gap(normalGap),
           TextButton(
               onPressed: changeCredential,
               child: Text(

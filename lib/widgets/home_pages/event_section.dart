@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wcycle_bd/data/littered_list_data.dart';
-import 'package:wcycle_bd/widgets/home_widgets/events_list_item.dart';
-import 'package:wcycle_bd/widgets/home_widgets/section_top_bar.dart';
+import 'package:wcycle_bd/screen/ui_view/events_list_ui.dart';
+import 'package:wcycle_bd/widgets/home_pages/events_list_item.dart';
+import 'package:wcycle_bd/widgets/home_pages/section_top_bar.dart';
 
 class EventSection extends StatelessWidget {
   const EventSection({super.key});
@@ -11,7 +12,15 @@ class EventSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SectionTopBar(stTxt: "Events", onMore: () {}),
+        SectionTopBar(
+            stTxt: "Events",
+            onMore: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EventsListUi(
+                    eventsList: litteredListData,
+                  ),
+                ))),
         SizedBox(
           height: 200,
           child: ListView.builder(

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:gap/gap.dart';
 import 'package:wcycle_bd/data/littered_list_data.dart';
-import 'package:wcycle_bd/widgets/home_widgets/carousel_card.dart';
-import 'package:wcycle_bd/widgets/home_widgets/event_section.dart';
-import 'package:wcycle_bd/widgets/home_widgets/littered_section.dart';
-import 'package:wcycle_bd/widgets/home_widgets/recyclable_price_section.dart';
+import 'package:wcycle_bd/widgets/home_pages/carousel_card.dart';
+import 'package:wcycle_bd/widgets/home_pages/event_section.dart';
+import 'package:wcycle_bd/widgets/home_pages/littered_section.dart';
+import 'package:wcycle_bd/widgets/home_pages/recyclable_price_section.dart';
 
-import 'package:wcycle_bd/widgets/home_widgets/reuseable_container.dart';
+import 'package:wcycle_bd/widgets/reusable_widgets/reuseable_container.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -15,6 +16,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
           Swiper(
@@ -46,15 +48,17 @@ class HomePage extends StatelessWidget {
                 Radius.circular(40),
               ),
             ),
-            child: const Column(
+            child: Column(
               children: [
-                RecyclablePriceSection(),
-                Gap(10),
-                LitteredSpotSection(),
-                Gap(10),
-                EventSection(),
-                Gap(10),
-                LitteredSpotSection(),
+                const RecyclablePriceSection(),
+                const Gap(10),
+                Animate(
+                    effects: const [MoveEffect()],
+                    child: const LitteredSpotSection()),
+                const Gap(10),
+                const EventSection(),
+                const Gap(10),
+                const LitteredSpotSection(),
               ],
             ),
           ),

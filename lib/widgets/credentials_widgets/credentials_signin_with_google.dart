@@ -5,6 +5,8 @@ import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/screen/home_screen.dart';
 
+final api = Apis();
+
 class CredentialsSigninWithGoogle extends StatelessWidget {
   const CredentialsSigninWithGoogle({super.key});
 
@@ -23,7 +25,7 @@ class CredentialsSigninWithGoogle extends StatelessWidget {
     );
 
     // Once signed in, return the UserCredential
-    return await Apis().firebaseAuth.signInWithCredential(credential);
+    return await api.firebaseAuth.signInWithCredential(credential);
   }
 
   @override
@@ -31,10 +33,14 @@ class CredentialsSigninWithGoogle extends StatelessWidget {
     void onSignWithGoogle() {
       DialogsHelper().showProgressBar(context);
       //final googleSignIn = await signInWithGoogle();
+
+      //This is for Sign by Google
+
       signInWithGoogle().then(
         (value) async {
           Navigator.pop(context);
-          if ((await Apis().userExist())) {
+          if ((await api.userExist())) {
+            if (!context.mounted) return;
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -42,7 +48,7 @@ class CredentialsSigninWithGoogle extends StatelessWidget {
                 ));
             return;
           } else {
-            await Apis().createGoogleUser().then((onValue) {
+            await api.createGoogleUser().then((onValue) {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -53,30 +59,6 @@ class CredentialsSigninWithGoogle extends StatelessWidget {
           }
         },
       );
-/*      if (googleSignIn.credential != null) {
-        if (!context.mounted) {
-          return;
-        } else {
-          Navigator.pop(context);
-          if ((await Apis().userExist())) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ));
-            return;
-          } else {
-            await Apis().createGoogleUser().then((onValue) {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
-                  ));
-              return;
-            });
-          }
-        }
-      }*/
     }
 
     return ElevatedButton.icon(

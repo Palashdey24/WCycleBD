@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wcycle_bd/model/recyclable_list_model.dart';
-import 'package:wcycle_bd/utilts/global_value.dart';
+import 'package:wcycle_bd/utilts/colors.dart';
 
 class RecyclableListItemInfo extends StatelessWidget {
   const RecyclableListItemInfo({super.key, required this.rcListModel});
@@ -31,6 +31,16 @@ class RecyclableListItemInfo extends StatelessWidget {
               "Level: ${rcListModel.rcImpact.name}",
               maxLines: 2,
               style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+            ),
+            const Gap(5),
+            const Text(
+              textAlign: TextAlign.center,
+              "Shop: baba and maa Enterorise",
+              maxLines: 2,
+              style: TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 27, 37, 16)),
             ),
             const Gap(10),
           ],

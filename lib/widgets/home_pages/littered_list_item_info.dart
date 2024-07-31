@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wcycle_bd/model/littered_list_model.dart';
-import 'package:wcycle_bd/utilts/global_value.dart';
+import 'package:wcycle_bd/helper/font_helper.dart';
+import 'package:wcycle_bd/model/littered_model.dart';
+import 'package:wcycle_bd/screen/ui_view/reuse/waste_material_chips.dart';
+import 'package:wcycle_bd/utilts/colors.dart';
+
+final fontHelper = FontHelper();
 
 class LitteredListItemInfo extends StatelessWidget {
-  const LitteredListItemInfo({super.key, required this.ltList});
+  const LitteredListItemInfo(
+      {super.key, required this.ltList, this.isVertical});
 
-  final LitteredListModel ltList;
+  final LitteredModel ltList;
+  final bool? isVertical;
 
   @override
   Widget build(BuildContext context) {
     String? combainWcat;
-    for (final wcat in ltList.ltWCat) {
+    for (final wcat in ltList.litteredWasteMat) {
       if (combainWcat == null) {
         combainWcat = wcat;
       } else {
@@ -28,7 +34,7 @@ class LitteredListItemInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            ltList.ltTittle,
+            ltList.litteredTittle,
             style: themes.titleSmall!.copyWith(
               color: Colors.blue,
               fontWeight: FontWeight.bold,
@@ -36,6 +42,8 @@ class LitteredListItemInfo extends StatelessWidget {
           ),
           const Gap(5),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               const Icon(
                 Icons.place,
@@ -46,7 +54,7 @@ class LitteredListItemInfo extends StatelessWidget {
                   textAlign: TextAlign.right,
                   maxLines: 5,
                   softWrap: true,
-                  "${ltList.villMetro}, ${ltList.thana}, ${ltList.division}",
+                  "${ltList.litteredVillMet}, ${ltList.litteredThana}, ${ltList.litteredDivision}",
                   style: GoogleFonts.lato(
                       fontSize: 8, fontWeight: FontWeight.bold),
                 ),
@@ -54,22 +62,26 @@ class LitteredListItemInfo extends StatelessWidget {
             ],
           ),
           const Gap(5),
-          Flexible(
-            child: Text(
-              "Type: $combainWcat ",
-              maxLines: 4,
-              textAlign: TextAlign.right,
-              style: const TextStyle(
-                  color: Color.fromARGB(202, 133, 139, 18),
-                  fontSize: 8,
-                  fontWeight: FontWeight.bold),
+          if (isVertical == null)
+            Flexible(
+              child: Text(
+                "Type: $combainWcat ",
+                maxLines: 4,
+                textAlign: TextAlign.right,
+                style: const TextStyle(
+                    color: Color.fromARGB(202, 133, 139, 18),
+                    fontSize: 8,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
           const Gap(5),
           Text(
-            "Level: ${ltList.ltLevel.name}",
+            "Level: ${ltList.litteredImpactLevel.toUpperCase()}",
             style: themes.titleSmall!.copyWith(color: kDefaultColor),
           ),
+          const Gap(5),
+          if (isVertical != null)
+            WasteMaterialChips(ltWCat: ltList.litteredWasteMat),
         ],
       ),
     );

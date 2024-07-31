@@ -3,53 +3,53 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
+import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/widgets/card_text_fields.dart';
 import 'package:wcycle_bd/widgets/form_text_texts.dart';
 
-class SigninForm extends StatefulWidget {
+class SigninForm extends StatelessWidget {
   const SigninForm({super.key});
 
   @override
-  State<SigninForm> createState() => _SigninFormState();
-}
+  Widget build(BuildContext context) {
+    final formKeyLog = GlobalKey<FormState>();
 
-class _SigninFormState extends State<SigninForm> {
-  final _formKeyLog = GlobalKey<FormState>();
+    String? emailTxt;
 
-  String? emailTxt;
+    String? password;
 
-  String? password;
+    void saveFn() async {
+      FocusScope.of(context).unfocus();
+      formKeyLog.currentState!.validate();
+      if (formKeyLog.currentState!.validate()) {
+        DialogsHelper().showProgressBar(context);
+        formKeyLog.currentState!.save();
 
-  void saveFn() async {
-    FocusScope.of(context).unfocus();
-    _formKeyLog.currentState!.validate();
-    if (_formKeyLog.currentState!.validate()) {
-      DialogsHelper().showProgressBar(context);
-      _formKeyLog.currentState!.save();
-
-      try {
-        final credentials = await Apis()
-            .firebaseAuth
-            .signInWithEmailAndPassword(email: emailTxt!, password: password!);
-        Navigator.pop(context);
-      } on FirebaseAuthException catch (error) {
-        if (!context.mounted) {
-          return;
+        try {
+          await Apis().firebaseAuth.signInWithEmailAndPassword(
+              email: emailTxt!, password: password!);
+          if (!context.mounted) return;
+          Navigator.pop(context);
+        } on FirebaseAuthException catch (error) {
+          if (!context.mounted) return;
+          Navigator.pop(context);
+          DialogsHelper().removeMessage(context);
+          DialogsHelper()
+              .showMessage(context, error.message ?? "Authentication Failed");
         }
-        Navigator.pop(context);
-        DialogsHelper().removeMessage(context);
-        DialogsHelper()
-            .showMessage(context, error.message ?? "Authentication Failed");
       }
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Form(
-      key: _formKeyLog,
+      key: formKeyLog,
       child: Column(
         children: [
+          const CircleAvatar(
+            backgroundColor: Colors.grey,
+            radius: 70,
+            backgroundImage: AssetImage(logo),
+          ),
+          const Gap(csGap),
           CardTextFields(
             cardWidegts: FormTextTexts(
               txtInType: TextInputType.emailAddress,

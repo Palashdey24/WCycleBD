@@ -16,14 +16,14 @@ enum Wastecat {
 final litteredListData = [
   LitteredListModel(
       ltTittle: "Wasted on Found",
-      ltLevel: ImapctLevel.Medium,
+      ltLevel: ImapctLevel.medium,
       ltWCat: [
         Wastecat.wood.name,
         Wastecat.glass.name,
         Wastecat.plastics.name,
         Wastecat.other.name
       ],
-      address: "New/471,University Road,Arefin Nagar, Chattogram",
+      address: "New/471,University Road,Arefin Nagar",
       division: "Chattogram",
       villMetro: "Arefin Nagar",
       thana: "Baizid Bostami",
@@ -31,13 +31,13 @@ final litteredListData = [
       ltSrc: "assets/metalfond.jpg"),
   LitteredListModel(
       ltTittle: "Industrial Wasted",
-      ltLevel: ImapctLevel.High,
+      ltLevel: ImapctLevel.high,
       ltWCat: [
         Wastecat.plastics.name,
         Wastecat.other.name,
         Wastecat.compositeMaterials.name
       ],
-      address: "Near Megha Community Center, Chakrashala,Patiya, Chattogram",
+      address: "Near Megha Community Center, Chakrashala",
       division: "Chattogram",
       villMetro: "Chakrashala",
       thana: "Patiya",
@@ -45,11 +45,11 @@ final litteredListData = [
       ltSrc: "assets/industrialGarbage.jpg"),
   LitteredListModel(
       ltTittle: "Metal on Road",
-      ltLevel: ImapctLevel.Low,
+      ltLevel: ImapctLevel.low,
       ltWCat: [
         Wastecat.metals.name,
       ],
-      address: "BahadharHat Khaca Bazar,Bahadharhat, Chattogram",
+      address: "BahadharHat Khaca Bazar,Bahadharhat",
       division: "Chattogram",
       villMetro: "Bahadharhat",
       thana: "Chandgaon",
@@ -57,13 +57,27 @@ final litteredListData = [
       ltSrc: 'assets/metal-field.jpg'),
   LitteredListModel(
       ltTittle: "Industrial Wasted",
-      ltLevel: ImapctLevel.High,
+      ltLevel: ImapctLevel.high,
       ltWCat: [
         Wastecat.plastics.name,
         Wastecat.other.name,
         Wastecat.compositeMaterials.name
       ],
-      address: "Near Megha Community Center, Chakrashala,Patiya, Chattogram",
+      address: "Near Megha Community Center, Chakrashala",
+      division: "Chattogram",
+      villMetro: "Chakrashala",
+      thana: "Patiya",
+      ward: "3 No",
+      ltSrc: "assets/industrialGarbage.jpg"),
+  LitteredListModel(
+      ltTittle: "Industrial Wasted",
+      ltLevel: ImapctLevel.high,
+      ltWCat: [
+        Wastecat.plastics.name,
+        Wastecat.other.name,
+        Wastecat.compositeMaterials.name
+      ],
+      address: "Near Megha Community Center, Chakrashala",
       division: "Chattogram",
       villMetro: "Chakrashala",
       thana: "Patiya",
@@ -71,11 +85,11 @@ final litteredListData = [
       ltSrc: 'assets/industrialGarbage.jpg'),
   LitteredListModel(
       ltTittle: "Metal on Road",
-      ltLevel: ImapctLevel.Low,
+      ltLevel: ImapctLevel.low,
       ltWCat: [
         Wastecat.metals.name,
       ],
-      address: "BahadharHat Khaca Bazar,Bahadharhat, Chattogram",
+      address: "BahadharHat Khaca Bazar",
       division: "Chattogram",
       villMetro: "Bahadharhat",
       thana: "Chandgaon",

@@ -1,17 +1,25 @@
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:wcycle_bd/model/users.dart';
 
 class Apis {
   final firebaseAuth = FirebaseAuth.instance;
   final fireStore = FirebaseFirestore.instance;
 
+  double deviceWidth(BuildContext context) {
+    return MediaQuery.sizeOf(context).width;
+  }
+
+  double deviceHeight(BuildContext context) {
+    return MediaQuery.sizeOf(context).height;
+  }
+
   User get currentUser => firebaseAuth.currentUser!;
 
-  void setUser(Map<String, dynamic> userData) async {
-    await fireStore.collection("users").doc(currentUser.uid).set(userData);
+  void setUser(Map<String, dynamic> userData, String collection) async {
+    await fireStore.collection(collection).doc(currentUser.uid).set(userData);
   }
 
   Future<bool> userExist() async {

@@ -1,16 +1,20 @@
-import 'dart:async';
 import 'dart:core';
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:wcycle_bd/model/nav_item_model.dart';
 import 'package:wcycle_bd/pages/account_page.dart';
 import 'package:wcycle_bd/pages/home_page.dart';
 import 'package:wcycle_bd/pages/news_page.dart';
-import 'package:wcycle_bd/pages/order_page.dart';
-import 'package:wcycle_bd/screen/credentials_screen.dart';
-import 'package:wcycle_bd/utilts/global_value.dart';
-import 'package:wcycle_bd/api/apis.dart';
+import 'package:wcycle_bd/pages/cart_page.dart';
+import 'package:wcycle_bd/utilts/colors.dart';
+import 'package:wcycle_bd/utilts/string.dart';
 import 'package:wcycle_bd/widgets/nav_icon_item.dart';
+
+final navItemList = [
+  NavItemModel(curves: Curves.easeInSine, iconDatas: Icons.home),
+  NavItemModel(curves: Curves.bounceOut, iconDatas: Icons.add_shopping_cart),
+  NavItemModel(curves: Curves.bounceIn, iconDatas: Icons.newspaper_rounded),
+  NavItemModel(curves: Curves.easeInCubic, iconDatas: Icons.person_2_rounded),
+];
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,16 +24,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool onNavHm = true;
-  bool onNavOd = false;
-  bool onNavNs = false;
-  bool onNavAcc = false;
-
   int currentIndex = 0;
 
   final pages = [
     const HomePage(),
-    const OrderPage(),
+    const CartPage(),
     const NewsPage(),
     const AccountPage(),
   ];
@@ -60,10 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.blueGrey,
               ))
         ],
-        title: Text(
+        title: const Text(
           appName,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
       ),
       bottomNavigationBar: Card(
@@ -80,73 +79,22 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            NavIconItem(
-              isSelect: onNavHm,
-              curves: Curves.easeInSine,
-              navIcon: Icons.home,
-              navFn: () {
-                setState(() {
-                  onNavHm = true;
-                  onNavAcc = false;
-                  onNavOd = false;
-                  onNavNs = false;
-                  currentIndex = 0;
-                });
-              },
-            ),
-            NavIconItem(
-              isSelect: onNavOd,
-              curves: Curves.bounceOut,
-              navIcon: Icons.add_shopping_cart,
-              navFn: () {
-                setState(() {
-                  onNavHm = false;
-                  onNavAcc = false;
-                  onNavOd = true;
-                  onNavNs = false;
-                  currentIndex = 1;
-                });
-              },
-            ),
-            NavIconItem(
-              isSelect: onNavNs,
-              curves: Curves.bounceIn,
-              navIcon: Icons.newspaper_rounded,
-              navFn: () {
-                setState(() {
-                  onNavHm = false;
-                  onNavAcc = false;
-                  onNavOd = false;
-                  onNavNs = true;
-                  currentIndex = 2;
-                });
-              },
-            ),
-            NavIconItem(
-              isSelect: onNavAcc,
-              curves: Curves.easeInCubic,
-              navIcon: Icons.person_2_rounded,
-              navFn: () async {
-                await Apis().firebaseAuth.signOut();
-                await GoogleSignIn().signOut();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CredentialScreen(),
-                    ));
-                setState(() {
-                  onNavHm = false;
-                  onNavAcc = true;
-                  onNavOd = false;
-                  onNavNs = false;
-                  currentIndex = 3;
-                });
-              },
-            ),
+            for (var navItems in navItemList)
+              NavIconItem(
+                  curves: navItems.curves,
+                  navIcon: navItems.iconDatas,
+                  navFn: () {
+                    setState(() {
+                      currentIndex = navItemList.indexOf(navItems);
+                    });
+                  },
+                  navIndex: navItemList.indexOf(navItems),
+                  selIndex: currentIndex)
           ],
         ),
       ),
-      body: pages[currentIndex],
+      body: AnimatedSwitcher(
+          duration: const Duration(seconds: 1), child: pages[currentIndex]),
     );
   }
 }
