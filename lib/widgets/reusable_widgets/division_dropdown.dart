@@ -7,12 +7,14 @@ class DivisionDropdown extends StatefulWidget {
       required this.formFieldValidator,
       required this.onDropdownFn,
       required this.dropLevel,
-      required this.dropHint});
+      required this.dropHint,
+      this.onSaved});
 
   final void Function(String value) onDropdownFn;
   final FormFieldValidator<String> formFieldValidator;
   final String dropLevel;
   final String dropHint;
+  final void Function(String? value)? onSaved;
 
   @override
   State<DivisionDropdown> createState() => _DivisionDropdownState();
@@ -33,6 +35,7 @@ class _DivisionDropdownState extends State<DivisionDropdown> {
       //this line for DropDown Dialog background color or Radius
       dropdownColor: Colors.black,
       borderRadius: BorderRadius.circular(30),
+      onSaved: widget.onSaved,
 
       //Decoration refer for hint and other outer
       decoration: InputDecoration(

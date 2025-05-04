@@ -25,37 +25,27 @@ class _AnimateCredentialsState extends State<AnimateCredentials> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
 
-    return InkWell(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: AnimatedCrossFade(
-                firstChild: const SigninForm(),
-                secondChild: const RegForm(),
-                crossFadeState: isSignForms
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
-                duration: const Duration(seconds: 1)),
-          ),
-          const Gap(normalGap),
-          TextButton(
-              onPressed: changeCredential,
-              child: Text(
-                isSignForms
-                    ? "Don't have a Account? Create A Account"
-                    : "Already have Account? Please SignIn",
-                style: theme.titleMedium!.copyWith(color: Colors.orangeAccent),
-              )),
-          Visibility(
-              visible: isSignForms, child: const CredentialsSigninWithGoogle()),
-        ],
-      ),
+    return Column(
+      children: [
+        AnimatedCrossFade(
+            firstChild: const Center(child: SigninForm()),
+            secondChild: const RegForm(),
+            crossFadeState: isSignForms
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+            duration: const Duration(seconds: 1)),
+        const Gap(normalGap),
+        TextButton(
+            onPressed: changeCredential,
+            child: Text(
+              isSignForms
+                  ? "Don't have a Account? Create A Account"
+                  : "Already have Account? Please SignIn",
+              style: theme.titleMedium!.copyWith(color: Colors.orangeAccent),
+            )),
+        Visibility(
+            visible: isSignForms, child: const CredentialsSigninWithGoogle()),
+      ],
     );
   }
 }

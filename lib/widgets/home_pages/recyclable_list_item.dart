@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wcycle_bd/model/recyclable_list_model.dart';
+import 'package:transparent_image/transparent_image.dart';
+import 'package:wcycle_bd/data/model/remote/recycle_product_model.dart';
+import 'package:wcycle_bd/provider/individual_store_provider.dart';
 import 'package:wcycle_bd/provider/recycable_provider.dart';
 import 'package:wcycle_bd/screen/ui_view/details/recycable_product_details.dart';
-import 'package:wcycle_bd/utilts/string.dart';
 import 'package:wcycle_bd/widgets/home_pages/recyclable_list_item_info.dart';
 
 class RecyclableListItem extends ConsumerWidget {
   const RecyclableListItem({
     super.key,
-    required this.rcListModel,
-    required this.isDtPage,
+    this.rcListModel,
+    this.isDtPage,
   });
 
-  final RecyclableListModel rcListModel;
-  final bool isDtPage;
+  final RecycleProductModel? rcListModel;
+  final bool? isDtPage;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final rcProviderFn = ref.read(recycableProvider.notifier);
+    final shopProviderfn = ref.read(individualStoreProvider.notifier);
     return Stack(
       children: [
         SizedBox(
@@ -27,17 +29,21 @@ class RecyclableListItem extends ConsumerWidget {
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              InkWell(
-                onTap: () {
-                  rcProviderFn.onChange(rcListModel);
-                  if (!isDtPage) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RecycableProductDetails(),
-                        ));
-                  }
-                },
+              GestureDetector(
+                onTap: rcListModel != null
+                    ? () {
+                        rcProviderFn.onChange(rcListModel!);
+                        shopProviderfn.shopData(context, rcListModel!.shopID);
+                        if (!isDtPage!) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const RecycableProductDetails(),
+                              ));
+                        }
+                      }
+                    : null,
                 child: Container(
                   margin: const EdgeInsets.only(left: 10, top: 20),
                   width: 100,
@@ -54,7 +60,9 @@ class RecyclableListItem extends ConsumerWidget {
                       bottomRight: Radius.circular(5),
                     ),
                   ),
-                  child: RecyclableListItemInfo(rcListModel: rcListModel),
+                  child: rcListModel != null
+                      ? RecyclableListItemInfo(rcListModel: rcListModel!)
+                      : null,
                 ),
               ),
               Positioned(
@@ -63,11 +71,15 @@ class RecyclableListItem extends ConsumerWidget {
                   child: Transform.rotate(
                     angle: 0.5,
                     child: CircleAvatar(
-                      backgroundColor: Colors.transparent,
+                      backgroundColor: rcListModel != null
+                          ? Colors.transparent
+                          : Colors.white,
                       radius: 29,
-                      child: FadeInImage(
-                          placeholder: const AssetImage(appLogo),
-                          image: AssetImage("assets/${rcListModel.imgRsc}")),
+                      child: rcListModel != null
+                          ? FadeInImage(
+                              placeholder: MemoryImage(kTransparentImage),
+                              image: NetworkImage(rcListModel!.productImage))
+                          : null,
                     ),
                   )),
             ],

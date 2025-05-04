@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:wcycle_bd/api/apis.dart';
-import 'package:wcycle_bd/model/littered_list_model.dart';
+import 'package:wcycle_bd/model/event_model.dart';
 import 'package:wcycle_bd/screen/ui_view/details/events_details.dart';
 import 'package:wcycle_bd/widgets/home_pages/even_date_show.dart';
 import 'package:wcycle_bd/widgets/home_pages/events_list_item_info.dart';
@@ -9,18 +8,23 @@ import 'package:wcycle_bd/widgets/home_pages/events_list_item_info.dart';
 final apis = Apis();
 
 class EventsListItem extends StatelessWidget {
-  const EventsListItem({super.key, required this.ltListModel, this.isVertical});
+  const EventsListItem({super.key, this.isVertical, required this.eventsModel});
 
-  final LitteredListModel ltListModel;
+  final EventModel eventsModel;
   final bool? isVertical;
 
   @override
   Widget build(BuildContext context) {
+    String eventsDate = eventsModel.eventsDate!.trim();
+    String year = eventsDate.substring(eventsDate.lastIndexOf(" ") + 1);
+    List<String> splitted = eventsDate.split(",");
+    List<String> dayMonth = splitted[1].split(" ");
+
     return InkWell(
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => EventsDetails(ltData: ltListModel),
+            builder: (context) => EventsDetails(eventData: eventsModel),
           )),
       child: Stack(
         children: [
@@ -39,17 +43,16 @@ class EventsListItem extends StatelessWidget {
                   bottomRight: Radius.circular(30),
                 ),
               ),
-              child: EventsListItemInfo(ltList: ltListModel)),
-          const Positioned(
+              child: EventsListItemInfo(eventList: eventsModel)),
+          Positioned(
               top: 0,
               left: 20,
               child: Row(
+                spacing: 2,
                 children: [
-                  EvenDateShow(dmyTxt: "05"),
-                  Gap(2),
-                  EvenDateShow(dmyTxt: "Dec"),
-                  Gap(2),
-                  EvenDateShow(dmyTxt: "24"),
+                  EvenDateShow(dmyTxt: dayMonth[2]),
+                  EvenDateShow(dmyTxt: dayMonth[1]),
+                  EvenDateShow(dmyTxt: year),
                 ],
               )),
         ],

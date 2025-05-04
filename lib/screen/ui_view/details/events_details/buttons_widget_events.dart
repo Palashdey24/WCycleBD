@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/pages/add/add_littered_spot_items.dart';
 
-class BottomFloatingWidgetevents extends StatelessWidget {
-  const BottomFloatingWidgetevents({super.key});
+class ButtonsWidgetEvents extends StatelessWidget {
+  const ButtonsWidgetEvents({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +13,12 @@ class BottomFloatingWidgetevents extends StatelessWidget {
         direction: Axis.horizontal,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
+        spacing: normalGap,
         children: [
           Expanded(
             child: ElevatedButton(
                 onPressed: () {}, child: const Text("Interested")),
           ),
-          const Gap(normalGap),
           Expanded(
             child: ElevatedButton(
                 onPressed: () => Navigator.push(

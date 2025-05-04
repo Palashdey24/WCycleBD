@@ -1,20 +1,30 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:gap/gap.dart';
-import 'package:wcycle_bd/data/littered_list_data.dart';
-import 'package:wcycle_bd/widgets/home_pages/carousel_card.dart';
+import 'package:wcycle_bd/helper/pre_style.dart';
+import 'package:wcycle_bd/provider/news_data.dart';
+import 'package:wcycle_bd/provider/user_fs_provider.dart';
 import 'package:wcycle_bd/widgets/home_pages/event_section.dart';
 import 'package:wcycle_bd/widgets/home_pages/littered_section.dart';
 import 'package:wcycle_bd/widgets/home_pages/recyclable_price_section.dart';
-
+import 'package:wcycle_bd/widgets/home_pages/recycle_shop_section.dart';
+import 'package:wcycle_bd/widgets/home_pages/service_section.dart';
+import 'package:wcycle_bd/widgets/reusable_widgets/carousel_card.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/reuseable_container.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userFSProvider);
+    final newsData = ref.watch(newsFSProvider);
+    ref
+        .watch(userFSProvider.notifier)
+        .intiValue(context, FirebaseAuth.instance.currentUser!.uid.toString());
+
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
@@ -26,15 +36,17 @@ class HomePage extends StatelessWidget {
             duration: 1200,
             layout: SwiperLayout.TINDER,
             scrollDirection: Axis.horizontal,
-            itemCount: litteredListData.length,
+            itemCount: newsData.length,
             itemBuilder: (context, index) {
-              return const ReuseableContainer(
+              return ReuseableContainer(
                 ctColor: Colors.orange,
-                ctMargin: EdgeInsets.all(22),
+                ctMargin: const EdgeInsets.all(22),
                 ctWidget: ReuseableContainer(
                   ctColor: Colors.blueGrey,
-                  ctMargin: EdgeInsets.only(right: 10),
-                  ctWidget: CarouselCard(),
+                  ctMargin: const EdgeInsets.only(right: 10),
+                  ctWidget: CarouselCard(
+                    newsModel: newsData[index],
+                  ),
                 ),
               );
             },
@@ -49,16 +61,14 @@ class HomePage extends StatelessWidget {
               ),
             ),
             child: Column(
+              spacing: normalGap,
               children: [
-                const RecyclablePriceSection(),
-                const Gap(10),
-                Animate(
-                    effects: const [MoveEffect()],
-                    child: const LitteredSpotSection()),
-                const Gap(10),
-                const EventSection(),
-                const Gap(10),
+                if (user.individual == true) const RecyclablePriceSection(),
                 const LitteredSpotSection(),
+                const ServiceSection(),
+                const EventSection(),
+                if (user.individual == true) const RecycleShopSection(),
+                const Gap(40),
               ],
             ),
           ),

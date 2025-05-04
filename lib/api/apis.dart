@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,12 +28,15 @@ class Apis {
 
   Future<void> createGoogleUser() async {
     final userInfo = Users(
-        phoneNumber: currentUser.phoneNumber.toString(),
-        gender: "N/A",
-        imgUri: currentUser.photoURL.toString(),
-        userName: currentUser.displayName.toString(),
-        birthDate: "N/A",
-        email: currentUser.email.toString());
+      phoneNumber: currentUser.phoneNumber.toString(),
+      gender: "N/A",
+      imgUri: currentUser.photoURL.toString(),
+      userName: currentUser.displayName.toString(),
+      birthDate: "N/A",
+      email: currentUser.email.toString(),
+      individual: true,
+      userStatus: "Under Review",
+    );
 
     return await fireStore
         .collection("users")

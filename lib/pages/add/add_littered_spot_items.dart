@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,19 +8,24 @@ import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/firebase_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
+import 'package:wcycle_bd/pages/add/reuse/firebase_dropdown_helper.dart';
 import 'package:wcycle_bd/pages/add/reuse/waste_material_chip.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/back_custom_button.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/division_dropdown.dart';
-import 'package:wcycle_bd/pages/add/reuse/firebase_dropdown_helper.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/form_text_outlined.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/upload_image.dart';
 
 final api = Apis();
-final dialogHelper = DialogsHelper();
-final firebaseHelper = FirebaseHelper();
 
 class AddLitteredSpotItems extends StatelessWidget {
   const AddLitteredSpotItems({super.key});
+
+  String? keyDataVaild(String? value, String errorMsg) {
+    if (value == null || value.trim().isEmpty || value.trim().length < 3) {
+      return errorMsg;
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,19 +40,19 @@ class AddLitteredSpotItems extends StatelessWidget {
     String? impactLevel;
     String? ltImage;
     List<String> wasteMaterial = [];
-    String userID = firebaseHelper.firebaseAuth.currentUser?.uid ?? "null";
+    String userID = FirebaseHelper.firebaseAuth.currentUser?.uid ?? "null";
 
     void onSave() {
       if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
         //Check upload image and level are null or added
         if (impactLevel == null || ltImage == null || wasteMaterial.isEmpty) {
-          dialogHelper.removeMessage(context);
-          dialogHelper.showMessage(context,
+          DialogsHelper.showMessage(context,
               "Please upload Image and Select Impact Level and Select at last one Waste Materials");
           return;
         } else {
           //Sent Littered data by Map to FirebaseHelper class where the function upload the data
-          final upData = firebaseHelper.upFirestoreData({
+          FirebaseHelper.upFirestoreData({
             "userId": userID,
             "createAdd": Timestamp.now().toString(),
             "litteredTittle": ltTittle,
@@ -63,8 +69,7 @@ class AddLitteredSpotItems extends StatelessWidget {
 
           //Check the data successfully Up or Not
           formKey.currentState!.reset();
-          dialogHelper.removeMessage(context);
-          dialogHelper.showMessage(context, "Data Added Successfully");
+          DialogsHelper.showMessage(context, "Data Added Successfully");
         }
       }
     }
@@ -96,31 +101,20 @@ class AddLitteredSpotItems extends StatelessWidget {
                               fieldHint:
                                   "Please add Littered Spot like waste on Pond etc",
                               fieldType: TextInputType.text,
-                              vaildator: (value) {
-                                if (value == null ||
-                                    value.trim().isEmpty ||
-                                    value.trim().length < 3) {
-                                  return "Please add A Littered Spot ";
-                                }
-                                ltTittle = value;
-                                return null;
-                              }),
+                              onSave: (value) => ltTittle = value,
+                              vaildator: (value) => keyDataVaild(
+                                  value, "Please add A Littered Spot ")),
                           const Gap(csGap + 20),
                           FormTextOutlined(
-                              iconData: FontAwesomeIcons.recycle,
-                              fieldlabel: "Address",
-                              fieldHint: "Please add Littered Spot Address",
-                              fieldType: TextInputType.text,
-                              maxLen: 72,
-                              vaildator: (value) {
-                                if (value == null ||
-                                    value.trim().isEmpty ||
-                                    value.trim().length < 3) {
-                                  return "Please add A valid address";
-                                }
-                                ltAddress = value;
-                                return null;
-                              }),
+                            iconData: FontAwesomeIcons.recycle,
+                            fieldlabel: "Address",
+                            fieldHint: "Please add Littered Spot Address",
+                            fieldType: TextInputType.text,
+                            maxLen: 72,
+                            onSave: (value) => ltAddress = value,
+                            vaildator: (value) => keyDataVaild(
+                                value, "Please add A Littered Spot Address"),
+                          ),
                           const Gap(csGap + 20),
                           Flex(
                             direction: Axis.horizontal,
@@ -160,39 +154,28 @@ class AddLitteredSpotItems extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: FormTextOutlined(
-                                    iconData: FontAwesomeIcons.recycle,
-                                    fieldlabel: "Village/Metro",
-                                    fieldHint:
-                                        "Please add Village or Metro name",
-                                    fieldType: TextInputType.text,
-                                    maxLen: 18,
-                                    vaildator: (value) {
-                                      if (value == null ||
-                                          value.trim().isEmpty ||
-                                          value.trim().length < 3) {
-                                        return "Please add A valid Villag or Metro";
-                                      }
-                                      ltVillMet = value;
-                                      return null;
-                                    }),
+                                  iconData: FontAwesomeIcons.recycle,
+                                  fieldlabel: "Village/Metro",
+                                  fieldHint: "Please add Village or Metro name",
+                                  fieldType: TextInputType.text,
+                                  maxLen: 18,
+                                  onSave: (value) => ltVillMet = value,
+                                  vaildator: (value) => keyDataVaild(value,
+                                      "Please add A Village or Metro Name"),
+                                ),
                               ),
                               const Gap(csGap),
                               Expanded(
                                 child: FormTextOutlined(
-                                    iconData: FontAwesomeIcons.recycle,
-                                    fieldlabel: "Thana",
-                                    fieldHint: "Please add Thana",
-                                    fieldType: TextInputType.text,
-                                    maxLen: 18,
-                                    vaildator: (value) {
-                                      if (value == null ||
-                                          value.trim().isEmpty ||
-                                          value.trim().length < 3) {
-                                        return "Please add A valid thana";
-                                      }
-                                      ltThana = value;
-                                      return null;
-                                    }),
+                                  iconData: FontAwesomeIcons.recycle,
+                                  fieldlabel: "Thana",
+                                  fieldHint: "Please add Thana",
+                                  fieldType: TextInputType.text,
+                                  maxLen: 18,
+                                  onSave: (value) => ltThana = value,
+                                  vaildator: (value) => keyDataVaild(
+                                      value, "Please add A Thana Name"),
+                                ),
                               ),
                             ],
                           ),

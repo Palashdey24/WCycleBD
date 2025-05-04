@@ -12,7 +12,8 @@ class FormTextOutlined extends StatelessWidget {
       this.obsecureTXt,
       this.intValue,
       required this.vaildator,
-      this.maxLines});
+      this.maxLines,
+      this.isEnable});
 
   final IconData iconData;
   final String fieldlabel;
@@ -24,6 +25,7 @@ class FormTextOutlined extends StatelessWidget {
   final int? maxLines;
   final FormFieldValidator<String> vaildator;
   final void Function(String value)? onSave;
+  final bool? isEnable;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class FormTextOutlined extends StatelessWidget {
       maxLines: maxLines,
       obscureText: obsecureTXt ?? false,
       initialValue: intValue,
+      enabled: isEnable,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.grey.withOpacity(.1),

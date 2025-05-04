@@ -2,30 +2,65 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 
 class CartItemRecycleInfo extends StatefulWidget {
-  const CartItemRecycleInfo({super.key});
+  const CartItemRecycleInfo({super.key, required this.quantity});
+
+  final int quantity;
 
   @override
   State<CartItemRecycleInfo> createState() => _CartItemRecycleInfoState();
 }
 
 class _CartItemRecycleInfoState extends State<CartItemRecycleInfo> {
+  int? cartItem;
+
   bool selectCart = false;
+
   @override
   Widget build(BuildContext context) {
+    cartItem ?? (cartItem = widget.quantity);
+    void onCartPlusFn() {
+      if (cartItem! < 15) {
+        setState(() {
+          cartItem = (cartItem! + 1);
+        });
+      } else {
+        DialogsHelper.showMessage(
+          context,
+          "Can't add more than 15 item",
+        );
+      }
+    }
+
+    // ? This function for cart minus
+
+    void onCartMinusFn() {
+      if (cartItem! > 1) {
+        setState(() {
+          cartItem = cartItem! - 1;
+        });
+      } else {
+        DialogsHelper.showMessage(
+          context,
+          "Can't item less than 1. Try delete",
+        );
+      }
+    }
+
     return Flex(
       direction: Axis.horizontal,
       children: [
         Radio(
           value: selectCart,
           groupValue: selectCart,
+          fillColor: WidgetStateProperty.all(Colors.white),
+          activeColor: Colors.green,
           onChanged: (value) {
-            setState(() {
-              selectCart = value!;
-              log(value.toString());
-            });
+            selectCart = value!;
+            log(value.toString());
           },
         ),
         Expanded(
@@ -36,55 +71,69 @@ class _CartItemRecycleInfoState extends State<CartItemRecycleInfo> {
                 "assets/metal-field.jpg",
               ),
             )),
-        const Expanded(
+        Expanded(
           flex: 50,
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Wrap(
-              direction: Axis.vertical,
-              spacing: 5,
-              children: [
-                Text(
-                  "Plastic",
-                  style: TextStyle(color: Colors.white),
+          child: Flex(
+            direction: Axis.horizontal,
+            children: [
+              Expanded(
+                flex: 50,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    direction: Axis.vertical,
+                    spacing: 5,
+                    children: [
+                      const Text(
+                        "Plastic",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        "\$ ${cartItem ?? widget.quantity} x5",
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                      Text(
+                        "\$ ${(cartItem! * 5).toString()}",
+                        style: const TextStyle(color: Colors.orange),
+                      ),
+                    ],
+                  ),
                 ),
-                Text(
-                  "\$ 17x5",
-                  style: TextStyle(color: Colors.grey),
-                ),
-                Text(
-                  "\$95",
-                  style: TextStyle(color: Colors.orange),
-                ),
-              ],
-            ),
+              ),
+              Expanded(
+                  flex: 20,
+                  child: Wrap(
+                    spacing: 5,
+                    children: [
+                      GestureDetector(
+                        onTap: onCartMinusFn,
+                        child: const CircleAvatar(
+                          radius: normalGap,
+                          child: FaIcon(
+                            FontAwesomeIcons.minus,
+                            size: normalGap,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "${cartItem ?? widget.quantity}",
+                        style: const TextStyle(color: Colors.lime),
+                      ),
+                      GestureDetector(
+                        onTap: onCartPlusFn,
+                        child: const CircleAvatar(
+                          radius: normalGap,
+                          child: FaIcon(
+                            FontAwesomeIcons.plus,
+                            size: normalGap,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ))
+            ],
           ),
         ),
-        const Expanded(
-            flex: 20,
-            child: Wrap(
-              spacing: 5,
-              children: [
-                CircleAvatar(
-                  radius: normalGap,
-                  child: FaIcon(
-                    FontAwesomeIcons.minus,
-                    size: normalGap,
-                  ),
-                ),
-                Text(
-                  "1",
-                  style: TextStyle(color: Colors.lime),
-                ),
-                CircleAvatar(
-                  radius: normalGap,
-                  child: FaIcon(
-                    FontAwesomeIcons.plus,
-                    size: normalGap,
-                  ),
-                ),
-              ],
-            ))
       ],
     );
   }

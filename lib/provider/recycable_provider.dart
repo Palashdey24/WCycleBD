@@ -1,22 +1,24 @@
-import 'dart:math';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wcycle_bd/data/recycable_price_data.dart';
-import 'package:wcycle_bd/model/recyclable_list_model.dart';
+import 'package:wcycle_bd/data/model/remote/recycle_product_model.dart';
 
-class RecycableProviderNotifier extends StateNotifier<RecyclableListModel> {
+class RecycableProviderNotifier extends StateNotifier<RecycleProductModel> {
   RecycableProviderNotifier()
-      : super(const RecyclableListModel(
-            rcName: "", rcImpact: ImapctLevel.high, rcPrice: 0, imgRsc: ""));
+      : super(RecycleProductModel(
+            impactLevel: "",
+            productImage: "",
+            productName: "",
+            productOnline: false,
+            productPrice: 0,
+            shopID: "",
+            productID: "N/A"));
 
-  void onChange(RecyclableListModel rcModel) {
+  void onChange(RecycleProductModel rcModel) {
     state = rcModel;
-    log(5);
   }
 }
 
 final recycableProvider =
-    StateNotifierProvider<RecycableProviderNotifier, RecyclableListModel>(
+    StateNotifierProvider<RecycableProviderNotifier, RecycleProductModel>(
   (ref) {
     return RecycableProviderNotifier();
   },

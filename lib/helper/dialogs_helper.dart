@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wcycle_bd/widgets/loading_widget.dart';
 
 class DialogsHelper {
-  void showMessage(BuildContext context, String msg) {
+  static void showMessage(BuildContext context, String msg) {
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         msg,
@@ -13,11 +14,7 @@ class DialogsHelper {
     ));
   }
 
-  void removeMessage(BuildContext context) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-  }
-
-  void showProgressBar(BuildContext context) {
+  static void showProgressBar(BuildContext context) {
     showDialog(
       context: context,
       builder: (_) {

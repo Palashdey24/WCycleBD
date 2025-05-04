@@ -5,8 +5,10 @@ class AccountOptionModel {
     required this.optionLabel,
     required this.iconColors,
     required this.iconData,
+    this.btWidgets,
   });
   final String optionLabel;
   final Color iconColors;
   final IconData iconData;
+  final Widget? btWidgets;
 }

@@ -31,13 +31,14 @@ class CredentialsSigninWithGoogle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onSignWithGoogle() {
-      DialogsHelper().showProgressBar(context);
+      DialogsHelper.showProgressBar(context);
       //final googleSignIn = await signInWithGoogle();
 
       //This is for Sign by Google
 
       signInWithGoogle().then(
         (value) async {
+          if (!context.mounted) return;
           Navigator.pop(context);
           if ((await api.userExist())) {
             if (!context.mounted) return;
@@ -49,6 +50,7 @@ class CredentialsSigninWithGoogle extends StatelessWidget {
             return;
           } else {
             await api.createGoogleUser().then((onValue) {
+              if (!context.mounted) return;
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -58,7 +60,11 @@ class CredentialsSigninWithGoogle extends StatelessWidget {
             });
           }
         },
-      );
+      ).catchError((error) {
+        if (!context.mounted) return;
+        Navigator.pop(context);
+        return;
+      });
     }
 
     return ElevatedButton.icon(

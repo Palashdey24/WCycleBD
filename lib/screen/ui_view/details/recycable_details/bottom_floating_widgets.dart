@@ -22,10 +22,12 @@ class BottomFloatingWidgets extends StatelessWidget {
             height: 48,
             child: Container(
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                    colors: [Colors.blue, Colors.white],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
+                gradient: const RadialGradient(
+                  radius: 5,
+                  tileMode: TileMode.repeated,
+                  center: Alignment.bottomRight,
+                  colors: [Colors.blueGrey, Colors.white],
+                ),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(16.0),
                 ),

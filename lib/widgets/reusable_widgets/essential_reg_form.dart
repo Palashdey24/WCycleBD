@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/widgets/card_text_fields.dart';
 import 'package:wcycle_bd/widgets/form_text_texts.dart';
 
@@ -39,6 +41,7 @@ class EssentialRegForm extends StatelessWidget {
             },
           ),
         ),
+        const Gap(normalGap),
         CardTextFields(
           cardWidegts: FormTextTexts(
               txtInType: TextInputType.emailAddress,
@@ -61,6 +64,7 @@ class EssentialRegForm extends StatelessWidget {
               },
               obscure: false),
         ),
+        const Gap(normalGap),
         CardTextFields(
             cardWidegts: FormTextTexts(
           txtInType: TextInputType.number,
@@ -80,6 +84,7 @@ class EssentialRegForm extends StatelessWidget {
           },
           onSave: onSaveNumber,
         )),
+        const Gap(normalGap),
         CardTextFields(
             cardWidegts: FormTextTexts(
           txtInType: TextInputType.visiblePassword,
@@ -97,8 +102,9 @@ class EssentialRegForm extends StatelessWidget {
             return null;
           },
           obscure: true,
-          onSave: (value) {},
+          onSave: onSavePassword,
         )),
+        const Gap(normalGap),
         CardTextFields(
           cardWidegts: FormTextTexts(
             txtInType: TextInputType.visiblePassword,
@@ -116,6 +122,7 @@ class EssentialRegForm extends StatelessWidget {
             onSave: (value) {},
           ),
         ),
+        const Gap(normalGap),
       ],
     );
   }

@@ -1,10 +1,12 @@
-
 import 'package:flutter/material.dart';
+import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/model/littered_model.dart';
 import 'package:wcycle_bd/screen/ui_view/littered_spot_list_ui.dart';
 import 'package:wcycle_bd/screen/ui_view/shimmer/lt_shimmer.dart';
 import 'package:wcycle_bd/widgets/home_pages/littered_list_item.dart';
 import 'package:wcycle_bd/widgets/home_pages/section_top_bar.dart';
+
+final apis = Apis();
 
 class LitteredSpotSection extends StatelessWidget {
   const LitteredSpotSection({super.key});
@@ -26,8 +28,11 @@ class LitteredSpotSection extends StatelessWidget {
                 ))),
         SizedBox(
           height: 150,
-          child: FutureBuilder(
-              future: apis.fireStore.collection('litteredSpot').get(),
+          child: StreamBuilder(
+              stream: apis.fireStore
+                  .collection('litteredSpot')
+                  .where("productOnline", isEqualTo: true)
+                  .snapshots(),
               builder: (BuildContext context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wcycle_bd/model/littered_list_model.dart';
+import 'package:wcycle_bd/model/event_model.dart';
 
 class EventsListItemInfo extends StatelessWidget {
-  const EventsListItemInfo({super.key, required this.ltList});
+  const EventsListItemInfo({super.key, required this.eventList});
 
-  final LitteredListModel ltList;
+  final EventModel eventList;
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +15,8 @@ class EventsListItemInfo extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Image.asset(
-          ltList.ltSrc,
+        Image.network(
+          eventList.ltSrc!,
           fit: BoxFit.cover,
           width: double.infinity,
           height: 80,
@@ -28,7 +28,7 @@ class EventsListItemInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                ltList.ltTittle,
+                eventList.eventsTittle!,
                 style: themes.titleSmall!.copyWith(
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
@@ -40,7 +40,7 @@ class EventsListItemInfo extends StatelessWidget {
                 softWrap: true,
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,
-                "T size which gave the result i wanted. size which gave the result i wanted.There is no way to limit the number of objects, but what you can do iThere is no way to limit the number of objects, but what you can do is to put the gridview in a container and limit the size which gave the result i wanted.",
+                eventList.eventsDescription!,
                 style: GoogleFonts.lato(
                   fontSize: 8,
                 ),
@@ -50,7 +50,7 @@ class EventsListItemInfo extends StatelessWidget {
                 children: [
                   Text(
                     textAlign: TextAlign.center,
-                    "Interested: 5",
+                    eventList.eventsInterested!.toString(),
                     style: themes.labelSmall,
                   ),
                   IconButton(

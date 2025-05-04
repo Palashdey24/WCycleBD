@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wcycle_bd/model/recyclable_list_model.dart';
+import 'package:wcycle_bd/data/model/remote/recycle_product_model.dart';
 import 'package:wcycle_bd/widgets/home_pages/recyclable_list_item.dart';
 
 class CustomeGridview extends StatelessWidget {
@@ -9,7 +9,7 @@ class CustomeGridview extends StatelessWidget {
       required this.onTap,
       required this.isDtpage});
 
-  final List<RecyclableListModel> rcList;
+  final List<RecycleProductModel> rcList;
   final void Function(int index) onTap;
   final bool isDtpage;
 

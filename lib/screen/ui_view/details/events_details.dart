@@ -1,51 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gap/gap.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
-import 'package:wcycle_bd/model/littered_list_model.dart';
-import 'package:wcycle_bd/screen/ui_view/details/events_details/bottom_floating_widget_events.dart';
-import 'package:wcycle_bd/screen/ui_view/details/recycable_details/shop_card_widget.dart';
+import 'package:wcycle_bd/model/event_model.dart';
+import 'package:wcycle_bd/provider/user_fs_provider.dart';
+import 'package:wcycle_bd/screen/ui_view/details/events_details/buttons_widget_events.dart';
+import 'package:wcycle_bd/screen/ui_view/details/events_details/organizer_card_widget.dart';
 import 'package:wcycle_bd/screen/ui_view/reuse/box_info_ui.dart';
 import 'package:wcycle_bd/screen/ui_view/reuse/details_frame_one.dart';
 import 'package:wcycle_bd/screen/ui_view/reuse/details_ui_kpi.dart';
 
 final fontHelpers = FontHelper();
 
-class EventsDetails extends StatelessWidget {
-  const EventsDetails({super.key, required this.ltData});
+class EventsDetails extends ConsumerWidget {
+  const EventsDetails({super.key, required this.eventData});
 
-  final LitteredListModel ltData;
+  final EventModel eventData;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.read(userFSProvider);
     return Scaffold(
       body: DetailsFrameOne(
           infoSections: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: normalGap,
             children: [
-              const Gap(normalGap),
               DetailsUiKpi(
-                kpiOneV: ltData.ltTittle,
-                kpiTwoV: ltData.address,
-                kpiThreeH: " 5",
+                kpiOneV: eventData.eventsTittle!,
+                kpiTwoV: eventData.litteredAddress!,
+                kpiThreeH: eventData.eventsInterested.toString(),
                 kpiTVIcons: FontAwesomeIcons.addressBook,
                 kpiThVIcons: Icons.favorite,
               ),
-              const Gap(normalGap),
-              const Divider(),
-              const Row(
+              if (user.individual == true) const ButtonsWidgetEvents(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  BoxInfoUI(text1: "21 Aug 2014", text2: "Date"),
-                  BoxInfoUI(text1: "9 Am", text2: "Time"),
+                  BoxInfoUI(text1: eventData.eventsDate!, text2: "Date"),
+                  BoxInfoUI(text1: eventData.eventsTime!, text2: "Time"),
                 ],
               ),
-              const Gap(csGap),
-              const Text(
-                'Lorem ipsum is simply dummy text of printing & typesetting industry, Lorem ipsum is simply dummy text of printing & typesetting industry.',
+              Text(
+                eventData.eventsDescription!,
                 textAlign: TextAlign.justify,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w200,
                   fontSize: 14,
                   letterSpacing: 0.27,
@@ -54,18 +55,14 @@ class EventsDetails extends StatelessWidget {
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
-              const Gap(csGap),
-              const ShopCardWidget(),
-              const Gap(normalGap),
+              OrganizerCardWidget(eventData.userId!),
               Text(
                 "Recommendation",
                 style: fontHelpers.bodyMedium(context),
               ),
-              const Gap(normalGap),
             ],
           ),
-          bottomPosWidgets: const BottomFloatingWidgetevents(),
-          stackImage: ltData.ltSrc),
+          stackImage: eventData.ltSrc!),
     );
   }
 }

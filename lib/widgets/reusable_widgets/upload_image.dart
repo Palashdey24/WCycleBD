@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,11 +41,11 @@ class _UploadImageState extends State<UploadImage> {
     final imagePicker = ImagePicker();
 
     final pickFile = await imagePicker.pickImage(
-        source:
-            imgOption == "Camera" ? ImageSource.camera : ImageSource.gallery,
-        imageQuality: 50,
-        maxWidth: 150,
-        maxHeight: 150);
+      source: imgOption == "Camera" ? ImageSource.camera : ImageSource.gallery,
+      imageQuality: 90,
+      /*    maxWidth: 150,
+        maxHeight: 150*/
+    );
 
     if (pickFile == null) {
       setState(() {
@@ -63,7 +64,7 @@ class _UploadImageState extends State<UploadImage> {
 
     //The below PickedFile are use for web
     PickedFile pfile = PickedFile(pickImageFile!.path);
-    uploadUri = await firebaseHelper.uploadImage(widget.storageRef,
+    uploadUri = await FirebaseHelper.uploadImage(widget.storageRef,
         pickFile.name.split("_").last, pfile, pickImageFile!);
 
     if (uploadUri != null) {
@@ -86,7 +87,7 @@ class _UploadImageState extends State<UploadImage> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         imagePickerHelper.showImgPickOptDia(
           context,
@@ -102,15 +103,21 @@ class _UploadImageState extends State<UploadImage> {
             )
           : CircleAvatar(
               radius: widget.radius ?? 70,
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.black26,
               child: uploadUri == null
                   ? widget.preImage == null
-                      ? const FaIcon(
+                      ? FaIcon(
                           FontAwesomeIcons.cloudArrowUp,
-                          color: Colors.redAccent,
-                          size: 65,
+                          color: Colors.lightGreen.shade500,
+                          size: widget.radius ?? 65,
                         )
-                      : Image.asset(widget.preImage!)
+                      : ClipOval(
+                          child: Image.network(
+                          widget.preImage!,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ))
                   : imageProvider,
             ),
     );

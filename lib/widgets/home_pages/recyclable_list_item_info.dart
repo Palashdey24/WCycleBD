@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:wcycle_bd/model/recyclable_list_model.dart';
+import 'package:wcycle_bd/data/model/remote/recycle_product_model.dart';
 import 'package:wcycle_bd/utilts/colors.dart';
 
 class RecyclableListItemInfo extends StatelessWidget {
   const RecyclableListItemInfo({super.key, required this.rcListModel});
 
-  final RecyclableListModel rcListModel;
+  final RecycleProductModel rcListModel;
 
   @override
   Widget build(BuildContext context) {
@@ -21,21 +21,21 @@ class RecyclableListItemInfo extends StatelessWidget {
           children: [
             Text(
               textAlign: TextAlign.center,
-              rcListModel.rcName,
+              rcListModel.productName,
               style: themes.labelLarge!
                   .copyWith(color: kDefaultColor, fontWeight: FontWeight.bold),
             ),
             const Gap(5),
             Text(
               textAlign: TextAlign.center,
-              "Level: ${rcListModel.rcImpact.name}",
+              "Level: ${rcListModel.impactLevel}",
               maxLines: 2,
               style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
             ),
             const Gap(5),
             const Text(
               textAlign: TextAlign.center,
-              "Shop: baba and maa Enterorise",
+              "Rating",
               maxLines: 2,
               style: TextStyle(
                   fontSize: 8,
@@ -52,7 +52,7 @@ class RecyclableListItemInfo extends StatelessWidget {
               borderRadius: BorderRadius.only(topRight: Radius.circular(10))),
           child: Text(
             textAlign: TextAlign.left,
-            "\$${rcListModel.rcPrice.toString()}",
+            "\$${rcListModel.productPrice}",
             style: themes.labelMedium!.copyWith(color: Colors.white),
           ),
         ),

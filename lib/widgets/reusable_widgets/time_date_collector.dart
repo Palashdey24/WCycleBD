@@ -28,8 +28,8 @@ class TimeDateCollector extends StatefulWidget {
 }
 
 class _TimeDateCollectorState extends State<TimeDateCollector> {
-  String selectDate = "Select Date : ";
-  String selectTime = "Select Time : ";
+  String selectDate = "Date : ";
+  String selectTime = "Time : ";
   void _datePicker() async {
     final date = await showDatePicker(
       context: context,
@@ -60,7 +60,8 @@ class _TimeDateCollectorState extends State<TimeDateCollector> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Flex(
+      direction: Axis.horizontal,
       children: [
         Expanded(
           child: Row(
@@ -69,12 +70,14 @@ class _TimeDateCollectorState extends State<TimeDateCollector> {
               Text(
                 selectDate,
                 style: fontHelper
-                    .bodyMedium(context)
+                    .bodySmall(context)
                     .copyWith(color: widget.lableColor ?? Colors.white),
               ),
               const Gap(largeGap),
               ElevatedButton(
                   onPressed: _datePicker,
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade200),
                   child: const FaIcon(
                     FontAwesomeIcons.solidCalendar,
                     color: Colors.orange,
@@ -90,9 +93,8 @@ class _TimeDateCollectorState extends State<TimeDateCollector> {
             children: [
               Text(
                 selectTime,
-                style: fontHelper
-                    .bodyMedium(context)
-                    .copyWith(color: Colors.white),
+                style:
+                    fontHelper.bodySmall(context).copyWith(color: Colors.white),
               ),
               const Gap(largeGap),
               ElevatedButton(

@@ -20,20 +20,21 @@ class ReusableContianerServicesBtn extends StatelessWidget {
           alignment: Alignment.center,
           height: 48,
           decoration: BoxDecoration(
-            gradient: RadialGradient(
+            gradient: LinearGradient(
                 colors: colors ??
                     [
-                      Colors.blue,
-                      Colors.white,
+                      Colors.lime.shade100,
+                      Colors.black54,
                     ],
-                radius: 7),
+                tileMode: TileMode.repeated,
+                begin: Alignment.topLeft),
             borderRadius: const BorderRadius.all(
               Radius.circular(16.0),
             ),
           ),
           child: Text(
             btntext,
-            style: fontHelper.bodyMedium(context),
+            style: fontHelper.bodyMedium(context).copyWith(color: Colors.white),
           ),
         ),
       ),

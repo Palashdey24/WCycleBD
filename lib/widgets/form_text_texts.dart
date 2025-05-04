@@ -40,10 +40,13 @@ class FormTextTexts extends StatelessWidget {
       keyboardType: txtInType,
       obscureText: obscure ?? false,
       decoration: InputDecoration(
+        filled: false,
         counterText: "",
         contentPadding: const EdgeInsets.all(0),
         errorBorder: InputBorder.none,
+        border: InputBorder.none,
         fillColor: Colors.black,
+        focusColor: Colors.transparent,
         errorStyle: const TextStyle(
           color: Colors.redAccent,
         ),
