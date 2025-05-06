@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -11,19 +12,59 @@ import 'package:wcycle_bd/pages/cart_page.dart';
 import 'package:wcycle_bd/provider/recycable_provider.dart';
 import 'package:wcycle_bd/screen/ui_view/details/recycable_details/custom_plus_minus_item_core.dart';
 
+const uuid = Uuid();
+
+// Generate a v1 (time-based) id
+
 class ProductDetailsAddCart extends ConsumerWidget {
   const ProductDetailsAddCart({
     super.key,
   });
 
+  static void addCartSql(BuildContext context, String randomId, String storeId,
+      String productId, int quantity, String userId) async {
+    DialogsHelper.showProgressBar(context);
+
+    final db = await CartDatabase.getDatabase();
+
+    await db.insert("carts", {
+      "id": randomId,
+      "userID": userId,
+      "productId": productId,
+      "storeId": storeId,
+      "quantity": quantity
+    }).then(
+      (value) {
+        if (value >= 1 && context.mounted) {
+          Navigator.pop(context);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CartPage(),
+              ));
+          return;
+        }
+        if (!context.mounted) return;
+        Navigator.of(context);
+
+        DialogsHelper.showMessage(context, "Something went wrong");
+        return;
+      },
+    ).onError(
+      (error, stackTrace) {
+        if (!context.mounted) return;
+        Navigator.of(context);
+        DialogsHelper.showMessage(context, "Something went wrong $error");
+      },
+    );
+
+    return;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const uuid = Uuid();
-
-// Generate a v1 (time-based) id
     final randomId = uuid.v4();
-    print("checking $randomId");
-
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     final phoneWidth = DeviceSize.getDeviceWidth(context);
     ValueNotifier<int> cartItem = ValueNotifier<int>(0);
     final rcLM = ref.read(recycableProvider);
@@ -34,30 +75,8 @@ class ProductDetailsAddCart extends ConsumerWidget {
         cartItem.value++;
         return;
       } else {
-        DialogsHelper.showProgressBar(context);
-
-        final db = await CartDatabase.getDatabase();
-
-        final check = await db.insert("carts", {
-          "id": randomId,
-          "productId": rcLM.productID,
-          "storeId": rcLM.shopID,
-          "quantity": quantity
-        }).whenComplete(
-          () {
-            if (!context.mounted) return;
-            Navigator.pop(context);
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CartPage(),
-                ));
-            return;
-          },
-        );
-        print(check);
-
-        return;
+        addCartSql(
+            context, randomId, rcLM.shopID, rcLM.productID, quantity, userId);
       }
     }
 

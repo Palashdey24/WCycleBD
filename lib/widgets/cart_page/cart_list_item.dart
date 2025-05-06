@@ -1,39 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/local_cart_model.dart';
-import 'package:wcycle_bd/model/store_model.dart';
 import 'package:wcycle_bd/widgets/cart_page/cart_item_recycle_info.dart';
 
 final fontHelpers = FontHelper();
 
-class CartListItem extends ConsumerStatefulWidget {
+class CartListItem extends StatelessWidget {
   const CartListItem({
     super.key,
     required this.cartModel,
   });
 
   final LocalCartModel cartModel;
-
-  @override
-  ConsumerState<CartListItem> createState() => _CartListItemState();
-}
-
-class _CartListItemState extends ConsumerState<CartListItem> {
-  late StoreModel storeData;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-/*    final allStoreData = ref.watch(storeFsDataProvider);
-    storeData = allStoreData.firstWhere((element) {
-      return element.id == widget.cartModel.storeId;
-    });*/
-  }
 
   @override
   Widget build(
@@ -55,7 +36,7 @@ class _CartListItemState extends ConsumerState<CartListItem> {
                 ),
                 const Gap(normalGap),
                 Text(
-                  widget.cartModel.recycleShopModel?.storeName ?? "Shop Name",
+                  cartModel.recycleShopModel?.storeName ?? "Shop Name",
                   style: fontHelpers
                       .bodySmall(context)
                       .copyWith(color: Colors.white),
@@ -64,10 +45,12 @@ class _CartListItemState extends ConsumerState<CartListItem> {
               ],
             ),
             CartItemRecycleInfo(
-              quantity: widget.cartModel.quantity,
+              quantity: cartModel.quantity,
+              recycleProductModel: cartModel.recycleProductModel,
             ),
             CartItemRecycleInfo(
-              quantity: widget.cartModel.quantity,
+              quantity: cartModel.quantity,
+              recycleProductModel: cartModel.recycleProductModel,
             ),
           ],
         ),

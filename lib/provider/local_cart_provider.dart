@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wcycle_bd/data/model/local/cart_database.dart';
 import 'package:wcycle_bd/model/local_cart_model.dart';
+import 'package:wcycle_bd/provider/recycable_fs_data.dart';
 import 'package:wcycle_bd/provider/store_fs_data.dart';
 
-class LocalCartIntiProviderNotifier extends StateNotifier<List<LocalCartModel>> {
+class LocalCartIntiProviderNotifier
+    extends StateNotifier<List<LocalCartModel>> {
   LocalCartIntiProviderNotifier() : super([]);
 
   Future<List<LocalCartModel>?> loadIntiCartData() async {
@@ -13,6 +15,7 @@ class LocalCartIntiProviderNotifier extends StateNotifier<List<LocalCartModel>> 
     final cartData = cartDatabase
         .map((e) => LocalCartModel(
             id: e['id'] as String,
+            userID: e['userID'] as String,
             productId: e['productId'] as String,
             storeId: e['storeId'] as String,
             quantity: e['quantity'] as int))
@@ -28,20 +31,11 @@ final localCartIntiProvider =
   return LocalCartIntiProviderNotifier();
 });
 
-
-
-
-
-
-
-
-
-
-
 final localCartProvider = Provider<List<LocalCartModel>>((ref) {
-   ref.read(localCartIntiProvider.notifier).loadIntiCartData();
-   final localCart =ref.watch(localCartIntiProvider);
+  ref.watch(localCartIntiProvider.notifier).loadIntiCartData();
+  final localCart = ref.watch(localCartIntiProvider);
   final storeData = ref.watch(storeFsDataProvider);
+  final recycleProduct = ref.watch(recycleFsDataProvider);
 
   final localCartData = localCart.map((e) {
     final storeDatastore = storeData.firstWhere(
@@ -49,12 +43,20 @@ final localCartProvider = Provider<List<LocalCartModel>>((ref) {
         return element.id == e.storeId;
       },
     );
+
+    final recycleProductData = recycleProduct.firstWhere(
+      (element) {
+        return element.productID == e.productId;
+      },
+    );
     return LocalCartModel(
-      id: e.id,
-      productId: e.productId,
-      storeId: e.storeId,
-      quantity: e.quantity,
-    recycleShopModel: storeDatastore);
+        id: e.id,
+        userID: e.userID,
+        productId: e.productId,
+        storeId: e.storeId,
+        quantity: e.quantity,
+        recycleShopModel: storeDatastore,
+        recycleProductModel: recycleProductData);
   }).toList();
 
   return localCartData;

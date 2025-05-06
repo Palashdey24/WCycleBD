@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,19 +19,21 @@ class CartPage extends ConsumerStatefulWidget {
 }
 
 class _CartPageState extends ConsumerState<CartPage> {
-  late Future<List<LocalCartModel>?> _loadCart;
-  late List<LocalCartModel> _loadAllCart;
-
+  late Future<List<LocalCartModel>?> loadCart;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _loadCart = ref.read(localCartIntiProvider.notifier).loadIntiCartData();
-    _loadAllCart = ref.read(localCartProvider);
+    loadCart = ref.read(localCartIntiProvider.notifier).loadIntiCartData();
   }
 
   @override
   Widget build(BuildContext context) {
+    List<LocalCartModel> loadAllCart = ref.watch(localCartProvider).where(
+      (element) {
+        return element.userID == FirebaseAuth.instance.currentUser!.uid;
+      },
+    ).toList();
+    final sequenceAllCarts = loadAllCart.reversed.toList();
     Widget emptyCart = Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -61,19 +64,8 @@ class _CartPageState extends ConsumerState<CartPage> {
               children: [
                 const BackCustomButton(),
                 Expanded(
-                  child: /*localCart.isNotEmpty
-                      ? ListView.builder(
-                          padding: const EdgeInsets.only(bottom: 100),
-                          itemCount: localCart.length,
-                          itemBuilder: (context, index) {
-                            return CartListItem(
-                              cartModel: localCart[index],
-                            );
-                          },
-                        )
-                      : emptyCart*/
-                      FutureBuilder(
-                    future: _loadCart,
+                  child: FutureBuilder(
+                    future: loadCart,
                     builder: (context, snapshot) {
                       {
                         switch (snapshot.connectionState) {
@@ -85,16 +77,15 @@ class _CartPageState extends ConsumerState<CartPage> {
                             );
                           case ConnectionState.active:
                           case ConnectionState.done:
-                            final cartData = snapshot.data;
                             //Add data to model list one after one
 
-                            return (cartData != null || cartData!.isNotEmpty)
+                            return (loadAllCart!.isNotEmpty)
                                 ? ListView.builder(
                                     padding: const EdgeInsets.only(bottom: 100),
-                                    itemCount: _loadAllCart.length,
+                                    itemCount: sequenceAllCarts.length,
                                     itemBuilder: (context, index) {
                                       return CartListItem(
-                                        cartModel: _loadAllCart[index],
+                                        cartModel: sequenceAllCarts[index],
                                       );
                                     },
                                   )

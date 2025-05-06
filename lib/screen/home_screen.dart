@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wcycle_bd/api/apis.dart';
@@ -8,7 +9,6 @@ import 'package:wcycle_bd/pages/account_page.dart';
 import 'package:wcycle_bd/pages/cart_page.dart';
 import 'package:wcycle_bd/pages/home_page.dart';
 import 'package:wcycle_bd/pages/news_page.dart';
-import 'package:wcycle_bd/provider/store_fs_data.dart';
 import 'package:wcycle_bd/provider/user_fs_provider.dart';
 import 'package:wcycle_bd/utilts/colors.dart';
 import 'package:wcycle_bd/utilts/string.dart';
@@ -26,35 +26,22 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int currentIndex = 0;
+  final uId = FirebaseAuth.instance.currentUser!.uid;
+  late User user;
 
-/*  @override
+  @override
   void initState() {
     super.initState();
-    final fsRef = FirebaseFirestore.instance.collection('events');
-
-    fsRef.snapshots().listen(
-      (event) {
-        final cities = [];
-        for (var doc in event.docs) {
-          cities.add(doc.data());
-        }
-
-        print(jsonEncode(cities));
-      },
-    );
-  }*/
+    ref.read(userFSProvider.notifier).intiValue(context, uId);
+  }
 
   @override
   Widget build(BuildContext context) {
-    ref.read(userFSProvider.notifier).intiValue(context, userId);
-    final userfn = ref.watch(userFSProvider);
-    final storeData = ref.watch(storeFsDataProvider);
-
-    print("all store Data:$storeData}");
+    final userInfo = ref.watch(userFSProvider);
 
     final pages = [
       const HomePage(),
-      if (userfn.individual == null || userfn.individual != false)
+      if (userInfo.individual == null || userInfo.individual != false)
         const Center(),
       const NewsPage(),
       const AccountPage(),
@@ -62,7 +49,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final navItemList = [
       NavItemModel(curves: Curves.easeInSine, iconDatas: Icons.home),
-      if (userfn.individual == null || userfn.individual != false)
+      if (userInfo.individual == null || userInfo.individual != false)
         NavItemModel(
             curves: Curves.bounceOut, iconDatas: Icons.add_shopping_cart),
       NavItemModel(curves: Curves.bounceIn, iconDatas: Icons.newspaper_rounded),
@@ -121,7 +108,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   navIcon: navItems.iconDatas,
                   navFn: () {
                     if (navItems.iconDatas == Icons.add_shopping_cart &&
-                        userfn.individual != false) {
+                        userInfo.individual != false) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(

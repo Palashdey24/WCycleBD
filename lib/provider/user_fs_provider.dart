@@ -18,16 +18,27 @@ class UserFsProviderNotifier extends StateNotifier<Users> {
             userStatus: "",
             individual: true));
 
-  void intiValue(BuildContext context, String userId) {
+  void intiValue(BuildContext context, String userId) async {
     final fsRef = apis.fireStore.collection('users').doc(userId);
+
+/*    final userDatas = await fsRef.get();
+
+    var data = userDatas.data();
+    Users users;
+    if (data != null) {
+      users = Users.fromJson(data);
+      state = users;
+    }*/
 
     fsRef.snapshots().listen(
       (event) {
         //print("current data: ${event.data()!}");
 
-        var data = event.data();
-        Users users = Users.fromJson(data!);
-        state = users;
+        if (event.exists) {
+          var data = event.data();
+          Users users = Users.fromJson(data!);
+          state = users;
+        }
       },
       onError: (error) {
         if (!context.mounted) return;
