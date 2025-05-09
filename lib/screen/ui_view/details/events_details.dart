@@ -4,12 +4,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/event_model.dart';
-import 'package:wcycle_bd/provider/user_fs_provider.dart';
+import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 import 'package:wcycle_bd/screen/ui_view/details/events_details/buttons_widget_events.dart';
-import 'package:wcycle_bd/screen/ui_view/details/events_details/organizer_card_widget.dart';
 import 'package:wcycle_bd/screen/ui_view/reuse/box_info_ui.dart';
 import 'package:wcycle_bd/screen/ui_view/reuse/details_frame_one.dart';
 import 'package:wcycle_bd/screen/ui_view/reuse/details_ui_kpi.dart';
+import 'package:wcycle_bd/screen/ui_view/reuse/info_card_widget.dart';
 
 final fontHelpers = FontHelper();
 
@@ -20,7 +20,7 @@ class EventsDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.read(userFSProvider);
+    final user = ref.read(currentUserdataProvider);
     return Scaffold(
       body: DetailsFrameOne(
           infoSections: Column(
@@ -55,7 +55,11 @@ class EventsDetails extends ConsumerWidget {
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
-              OrganizerCardWidget(eventData.userId!),
+              //OrganizerCardWidget(eventData.userId!),
+              InfoCardWidget(
+                dataId: eventData.userId!,
+                isEvent: true,
+              ),
               Text(
                 "Recommendation",
                 style: fontHelpers.bodyMedium(context),

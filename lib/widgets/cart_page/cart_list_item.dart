@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
-import 'package:wcycle_bd/model/local_cart_model.dart';
+import 'package:wcycle_bd/provider/provider_scope/cartListItemProvider.dart';
 import 'package:wcycle_bd/widgets/cart_page/cart_item_recycle_info.dart';
 
 final fontHelpers = FontHelper();
 
-class CartListItem extends StatelessWidget {
+class CartListItem extends ConsumerWidget {
   const CartListItem({
     super.key,
-    required this.cartModel,
   });
 
-  final LocalCartModel cartModel;
-
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cartData = ref.watch(cartItemProvider);
     return Card(
       color: Colors.transparent,
       elevation: 1,
@@ -36,7 +33,7 @@ class CartListItem extends StatelessWidget {
                 ),
                 const Gap(normalGap),
                 Text(
-                  cartModel.recycleShopModel?.storeName ?? "Shop Name",
+                  cartData.recycleShopModel?.storeName ?? "Shop Name",
                   style: fontHelpers
                       .bodySmall(context)
                       .copyWith(color: Colors.white),
@@ -45,12 +42,8 @@ class CartListItem extends StatelessWidget {
               ],
             ),
             CartItemRecycleInfo(
-              quantity: cartModel.quantity,
-              recycleProductModel: cartModel.recycleProductModel,
-            ),
-            CartItemRecycleInfo(
-              quantity: cartModel.quantity,
-              recycleProductModel: cartModel.recycleProductModel,
+              quantity: cartData.quantity,
+              recycleProductModel: cartData.recycleProductModel,
             ),
           ],
         ),

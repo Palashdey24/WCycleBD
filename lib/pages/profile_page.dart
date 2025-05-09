@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
-import 'package:wcycle_bd/provider/user_fs_provider.dart';
+import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/profile_page_kpi_data.dart';
 
 class ProfilePage extends ConsumerWidget {
@@ -10,7 +10,7 @@ class ProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userFs = ref.watch(userFSProvider);
+    final userFs = ref.watch(currentUserdataProvider);
     return Column(
       children: [
         Expanded(

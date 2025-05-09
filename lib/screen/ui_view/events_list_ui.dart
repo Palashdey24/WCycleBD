@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/event_model.dart';
 import 'package:wcycle_bd/pages/add/add_events_items.dart';
-import 'package:wcycle_bd/provider/user_fs_provider.dart';
+import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 import 'package:wcycle_bd/widgets/home_pages/events_list_item.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/search_box.dart';
 
@@ -15,7 +15,7 @@ class EventsListUi extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userFSProvider);
+    final user = ref.watch(currentUserdataProvider);
     return Scaffold(
       floatingActionButton: user.individual == false
           ? FloatingActionButton(

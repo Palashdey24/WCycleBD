@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wcycle_bd/screen/splash_screen.dart';
+import 'package:wcycle_bd/screen/auth_check_screen.dart';
 import 'package:wcycle_bd/utilts/colors.dart';
 
 import 'firebase_options.dart';
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       home: /*const Scaffold(
           backgroundColor: Colors.lightGreen,
           body: RegForm()) */
-          const SplashScreen(),
+          const AuthCheckScreen(),
     );
   }
 }

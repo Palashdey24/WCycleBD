@@ -39,7 +39,7 @@ class RecyclableListItem extends ConsumerWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    const RecycableProductDetails(),
+                                    const RecycleProductDetails(),
                               ));
                         }
                       }

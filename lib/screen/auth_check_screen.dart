@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wcycle_bd/api/apis.dart';
-import 'package:wcycle_bd/provider/user_fs_provider.dart';
 import 'package:wcycle_bd/screen/credentials_screen.dart';
-import 'package:wcycle_bd/screen/home_screen.dart';
+import 'package:wcycle_bd/screen/splash_screen.dart';
 import 'package:wcycle_bd/widgets/loading_widget.dart';
 
 class AuthCheckScreen extends ConsumerWidget {
@@ -22,9 +20,7 @@ class AuthCheckScreen extends ConsumerWidget {
           );
         }
         if (snapshot.hasData) {
-          ref.read(userFSProvider.notifier).intiValue(
-              context, FirebaseAuth.instance.currentUser!.uid.toString());
-          return const HomeScreen();
+          return const SplashScreen();
         }
         return const CredentialScreen();
       },

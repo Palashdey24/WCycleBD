@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wcycle_bd/helper/firebase_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
-import 'package:wcycle_bd/provider/user_fs_provider.dart';
+import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 
 class BottomFloatingWidgetLt extends ConsumerWidget {
   const BottomFloatingWidgetLt({super.key, this.onCreateEvent});
@@ -13,9 +13,9 @@ class BottomFloatingWidgetLt extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref
-        .read(userFSProvider.notifier)
+        .read(currentUserdataProvider.notifier)
         .intiValue(context, FirebaseHelper.firebaseAuth.currentUser!.uid);
-    final user = ref.watch(userFSProvider);
+    final user = ref.watch(currentUserdataProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Flex(

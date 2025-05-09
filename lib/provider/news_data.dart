@@ -5,7 +5,7 @@ import 'package:wcycle_bd/model/news_model.dart';
 class NewsFsProviderNotifier extends StateNotifier<List<NewsModel>> {
   NewsFsProviderNotifier() : super([]);
 
-  void newsData() async {
+  Future<bool?> newsData() async {
     final fsRef =
         await FirebaseFirestore.instance.collection('News').limit(5).get();
     final newsData = fsRef.docs;
@@ -14,6 +14,7 @@ class NewsFsProviderNotifier extends StateNotifier<List<NewsModel>> {
         newsData.map((e) => NewsModel.fromJson(e.data())).toList();
 
     state = newsDataList;
+    return true;
   }
 }
 

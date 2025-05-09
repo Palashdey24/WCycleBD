@@ -1,13 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wcycle_bd/api/apis.dart';
-import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/model/users.dart';
 
 final apis = Apis();
 
-class UserFsProviderNotifier extends StateNotifier<Users> {
-  UserFsProviderNotifier()
+class IndividualUserdataProviderNotifier extends StateNotifier<Users> {
+  IndividualUserdataProviderNotifier()
       : super(Users(
             phoneNumber: "",
             gender: "",
@@ -18,17 +18,8 @@ class UserFsProviderNotifier extends StateNotifier<Users> {
             userStatus: "",
             individual: true));
 
-  void intiValue(BuildContext context, String userId) async {
+  Future<void> intiValue(String userId) async {
     final fsRef = apis.fireStore.collection('users').doc(userId);
-
-/*    final userDatas = await fsRef.get();
-
-    var data = userDatas.data();
-    Users users;
-    if (data != null) {
-      users = Users.fromJson(data);
-      state = users;
-    }*/
 
     fsRef.snapshots().listen(
       (event) {
@@ -41,14 +32,13 @@ class UserFsProviderNotifier extends StateNotifier<Users> {
         }
       },
       onError: (error) {
-        if (!context.mounted) return;
-        DialogsHelper.showMessage(context, "Listen Failed: $error");
+        log("Listen Failed: $error");
       },
     );
   }
 }
 
-final userFSProvider =
-    StateNotifierProvider<UserFsProviderNotifier, Users>((ref) {
-  return UserFsProviderNotifier();
+final individualUserdataProvider =
+    StateNotifierProvider<IndividualUserdataProviderNotifier, Users>((ref) {
+  return IndividualUserdataProviderNotifier();
 });

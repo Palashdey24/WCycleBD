@@ -9,6 +9,7 @@ import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/firebase_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/users.dart';
+import 'package:wcycle_bd/screen/splash_screen.dart';
 import 'package:wcycle_bd/utilts/colors.dart';
 import 'package:wcycle_bd/widgets/card_text_fields.dart';
 import 'package:wcycle_bd/widgets/credentials_widgets/organization_docs.dart';
@@ -94,25 +95,37 @@ class _RegFormState extends State<RegForm> with TickerProviderStateMixin {
           return null;
         });
       }
-      await Apis().firebaseAuth.createUserWithEmailAndPassword(
-          email: userEmailTxt!, password: userPassword!);
+      await Apis()
+          .firebaseAuth
+          .createUserWithEmailAndPassword(
+              email: userEmailTxt!, password: userPassword!)
+          .then(
+        (value) {
+          if (value.user != null) {
+            api.setUser(
+                Users(
+                        phoneNumber: phoneNumber ?? "N?A",
+                        gender: gender ?? "N/A",
+                        imgUri: userImg!,
+                        userName: fullName!,
+                        birthDate: birthDate ?? "N/A",
+                        email: userEmailTxt!,
+                        individual: individualAct,
+                        userStatus: "Under Review",
+                        doc: docDownloadUri)
+                    .toJson(),
+                "users");
 
-      api.setUser(
-          Users(
-                  phoneNumber: phoneNumber ?? "N?A",
-                  gender: gender ?? "N/A",
-                  imgUri: userImg!,
-                  userName: fullName!,
-                  birthDate: birthDate ?? "N/A",
-                  email: userEmailTxt!,
-                  individual: individualAct,
-                  userStatus: "Under Review",
-                  doc: docDownloadUri)
-              .toJson(),
-          "users");
-
-      if (!mounted) return;
-      Navigator.pop(context);
+            if (!mounted) return;
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SplashScreen(),
+                ));
+          }
+        },
+      );
     } on FirebaseAuthException catch (error) {
       if (!mounted) return;
       Navigator.pop(context);

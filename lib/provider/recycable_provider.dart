@@ -12,7 +12,7 @@ class RecycableProviderNotifier extends StateNotifier<RecycleProductModel> {
             shopID: "",
             productID: "N/A"));
 
-  void onChange(RecycleProductModel rcModel) {
+  Future<void> onChange(RecycleProductModel rcModel) async {
     state = rcModel;
   }
 }

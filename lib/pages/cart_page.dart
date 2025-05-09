@@ -7,6 +7,7 @@ import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/local_cart_model.dart';
 import 'package:wcycle_bd/provider/local_cart_provider.dart';
+import 'package:wcycle_bd/provider/provider_scope/cartListItemProvider.dart';
 import 'package:wcycle_bd/screen/ui_view/shimmer/recycle_shimmer.dart';
 import 'package:wcycle_bd/widgets/cart_page/cart_list_item.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/back_custom_button.dart';
@@ -80,15 +81,24 @@ class _CartPageState extends ConsumerState<CartPage> {
                             //Add data to model list one after one
 
                             return (loadAllCart!.isNotEmpty)
-                                ? ListView.builder(
-                                    padding: const EdgeInsets.only(bottom: 100),
-                                    itemCount: sequenceAllCarts.length,
-                                    itemBuilder: (context, index) {
-                                      return CartListItem(
-                                        cartModel: sequenceAllCarts[index],
-                                      );
-                                    },
-                                  )
+                                ? Consumer(builder: (context, ref, child) {
+                                    return ListView.builder(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 100),
+                                      itemCount: sequenceAllCarts.length,
+                                      itemBuilder: (context, index) {
+                                        return ProviderScope(
+                                          key: ValueKey(
+                                              sequenceAllCarts[index].id),
+                                          overrides: [
+                                            cartItemProvider.overrideWithValue(
+                                                sequenceAllCarts[index]),
+                                          ],
+                                          child: CartListItem(),
+                                        );
+                                      },
+                                    );
+                                  })
                                 : emptyCart;
                         }
                       }

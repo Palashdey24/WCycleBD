@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
+import 'package:wcycle_bd/screen/splash_screen.dart';
 import 'package:wcycle_bd/widgets/card_text_fields.dart';
 import 'package:wcycle_bd/widgets/form_text_texts.dart';
 
@@ -43,10 +44,22 @@ class SigninForm extends StatelessWidget {
         formKeyLog.currentState!.save();
 
         try {
-          if (!context.mounted) return;
-          Navigator.pop(context);
-          await Apis().firebaseAuth.signInWithEmailAndPassword(
-              email: emailTxt!, password: password!);
+          await Apis()
+              .firebaseAuth
+              .signInWithEmailAndPassword(email: emailTxt!, password: password!)
+              .then(
+            (value) {
+              if (value.user != null) {
+                if (!context.mounted) return;
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SplashScreen(),
+                    ));
+              }
+            },
+          );
         } on FirebaseAuthException catch (error) {
           if (!context.mounted) return;
           Navigator.pop(context);

@@ -45,7 +45,7 @@ class ProductDetailsAddCart extends ConsumerWidget {
           return;
         }
         if (!context.mounted) return;
-        Navigator.of(context);
+        Navigator.pop(context);
 
         DialogsHelper.showMessage(context, "Something went wrong");
         return;
@@ -53,7 +53,7 @@ class ProductDetailsAddCart extends ConsumerWidget {
     ).onError(
       (error, stackTrace) {
         if (!context.mounted) return;
-        Navigator.of(context);
+        Navigator.pop(context);
         DialogsHelper.showMessage(context, "Something went wrong $error");
       },
     );

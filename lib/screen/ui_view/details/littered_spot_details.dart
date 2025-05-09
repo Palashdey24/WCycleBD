@@ -6,7 +6,7 @@ import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/littered_model.dart';
 import 'package:wcycle_bd/pages/add/add_littered_spot_items.dart';
 import 'package:wcycle_bd/pages/add/create_event.dart';
-import 'package:wcycle_bd/provider/user_fs_provider.dart';
+import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 import 'package:wcycle_bd/screen/ui_view/details/littered_details/bottom_floating_widget_lt.dart';
 import 'package:wcycle_bd/screen/ui_view/reuse/details_frame_one.dart';
 import 'package:wcycle_bd/screen/ui_view/reuse/details_ui_kpi.dart';
@@ -21,7 +21,7 @@ class LitteredSpotDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.read(userFSProvider);
+    final user = ref.read(currentUserdataProvider);
     final fullAddress =
         "${ltData.litteredAddress},${ltData.litteredWard}, ${ltData.litteredVillMet}, ${ltData.litteredThana}, ${ltData.litteredDivision},";
     return Scaffold(

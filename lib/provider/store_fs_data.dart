@@ -5,7 +5,7 @@ import 'package:wcycle_bd/model/store_model.dart';
 class StoreFsDataProviderNotifier extends StateNotifier<List<StoreModel>> {
   StoreFsDataProviderNotifier() : super([]);
 
-  void loadStoreAllData() async {
+  Future<bool?> loadStoreAllData() async {
     final fsRef = await FirebaseFirestore.instance.collection('store').get();
     final storeData = fsRef.docs;
 
@@ -13,6 +13,7 @@ class StoreFsDataProviderNotifier extends StateNotifier<List<StoreModel>> {
         storeData.map((e) => StoreModel.fromJson(e.data())).toList();
 
     state = storeDataList;
+    return true;
   }
 }
 

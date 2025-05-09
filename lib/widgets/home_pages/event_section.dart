@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wcycle_bd/helper/firebase_helper.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/model/event_model.dart';
-import 'package:wcycle_bd/provider/user_fs_provider.dart';
+import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 import 'package:wcycle_bd/screen/ui_view/events_list_ui.dart';
 import 'package:wcycle_bd/screen/ui_view/shimmer/lt_shimmer.dart';
 import 'package:wcycle_bd/widgets/home_pages/events_list_item.dart';
@@ -24,7 +24,7 @@ class EventSection extends ConsumerWidget {
             isEqualTo: FirebaseHelper.firebaseAuth.currentUser!.uid)
         .get();
     List<EventModel> eventListData = [];
-    final user = ref.read(userFSProvider);
+    final user = ref.read(currentUserdataProvider);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

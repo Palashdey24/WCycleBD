@@ -1,26 +1,29 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
+import 'package:wcycle_bd/helper/sqlflite_helper.dart';
+import 'package:wcycle_bd/provider/local_wishlist_provider.dart';
 import 'package:wcycle_bd/provider/recycable_provider.dart';
 import 'package:wcycle_bd/provider/recycle_recommend_provider.dart';
 import 'package:wcycle_bd/screen/ui_view/details/recycable_details/product_details_add_cart.dart';
-import 'package:wcycle_bd/screen/ui_view/details/recycable_details/shop_card_widget.dart';
 import 'package:wcycle_bd/screen/ui_view/reuse/details_ui_kpi.dart';
+import 'package:wcycle_bd/screen/ui_view/reuse/info_card_widget.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/back_custom_button.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/custome_gridview.dart';
 
 final api = Apis();
 final fontHelpers = FontHelper();
 
-class RecycableProductDetails extends ConsumerWidget {
-  const RecycableProductDetails({super.key});
+class RecycleProductDetails extends ConsumerWidget {
+  const RecycleProductDetails({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ValueNotifier<bool> isWish = ValueNotifier(false);
     final rcLM = ref.read(recycableProvider);
     final rcLMFn = ref.read(recycableProvider.notifier);
     ref.read(recyclerecommendProvider.notifier).recommendate(
@@ -28,6 +31,17 @@ class RecycableProductDetails extends ConsumerWidget {
         );
 
     final rcRecommend = ref.watch(recyclerecommendProvider);
+    final wishList = ref.watch(localWishProvider);
+
+    wishList.any((element) {
+      if (element.productID == rcLM.productID) {
+        isWish.value = true;
+        return true;
+      } else {
+        isWish.value = false;
+        return false;
+      }
+    });
 
     return Scaffold(
       floatingActionButton: const Padding(
@@ -49,9 +63,7 @@ class RecycableProductDetails extends ConsumerWidget {
                   children: [
                     SizedBox(
                       height: api.deviceHeight(context) * 0.26,
-                      child: FadeInImage(
-                          placeholder: MemoryImage(kTransparentImage),
-                          image: NetworkImage(rcLM.productImage)),
+                      child: CachedNetworkImage(imageUrl: rcLM.productImage),
                     ),
                     Expanded(
                       child: Stack(
@@ -81,7 +93,9 @@ class RecycableProductDetails extends ConsumerWidget {
                                     Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 15, vertical: 8),
-                                        child: ShopCardWidget(rcLM.shopID)),
+                                        child: InfoCardWidget(
+                                          dataId: rcLM.shopID,
+                                        )),
                                     const Gap(normalGap),
                                     Text(
                                       "Recommendation",
@@ -102,12 +116,28 @@ class RecycableProductDetails extends ConsumerWidget {
                               ),
                             ),
                           ),
-                          const Positioned(
+                          Positioned(
                             right: 5,
-                            child: CircleAvatar(
-                              radius: 17,
-                              child: Icon(Icons.favorite_rounded),
-                            ),
+                            child: ValueListenableBuilder(
+                                valueListenable: isWish,
+                                builder: (context, value, child) {
+                                  return GestureDetector(
+                                    onTap: () => !isWish.value
+                                        ? SqlfliteHelper.addWishList(
+                                            rcLM.productID, context)
+                                        : SqlfliteHelper.removeWishList(
+                                            rcLM.productID, context),
+                                    child: CircleAvatar(
+                                      radius: 17,
+                                      child: Icon(
+                                        Icons.favorite_rounded,
+                                        color: isWish.value
+                                            ? Colors.red
+                                            : Colors.white,
+                                      ),
+                                    ),
+                                  );
+                                }),
                           ),
                         ],
                       ),

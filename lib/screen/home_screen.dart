@@ -9,7 +9,7 @@ import 'package:wcycle_bd/pages/account_page.dart';
 import 'package:wcycle_bd/pages/cart_page.dart';
 import 'package:wcycle_bd/pages/home_page.dart';
 import 'package:wcycle_bd/pages/news_page.dart';
-import 'package:wcycle_bd/provider/user_fs_provider.dart';
+import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 import 'package:wcycle_bd/utilts/colors.dart';
 import 'package:wcycle_bd/utilts/string.dart';
 import 'package:wcycle_bd/widgets/nav_icon_item.dart';
@@ -32,12 +32,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(userFSProvider.notifier).intiValue(context, uId);
+    ref.read(currentUserdataProvider.notifier).intiValue(context, uId);
   }
 
   @override
   Widget build(BuildContext context) {
-    final userInfo = ref.watch(userFSProvider);
+    final userInfo = ref.watch(currentUserdataProvider);
 
     final pages = [
       const HomePage(),

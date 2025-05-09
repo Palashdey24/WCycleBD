@@ -36,7 +36,7 @@ class RecycableProductListUi extends ConsumerWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const RecycableProductDetails(),
+                          builder: (context) => const RecycleProductDetails(),
                         ));
                   },
                 ),

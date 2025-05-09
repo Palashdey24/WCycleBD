@@ -8,7 +8,7 @@ import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/account_option_model.dart';
 import 'package:wcycle_bd/pages/home_page.dart';
 import 'package:wcycle_bd/pages/profile_page.dart';
-import 'package:wcycle_bd/provider/user_fs_provider.dart';
+import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 
 final fontHelper = FontHelper();
 
@@ -45,7 +45,7 @@ class AccountTopScetions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final users = ref.watch(userFSProvider);
+    final users = ref.watch(currentUserdataProvider);
 
     return SizedBox(
       width: double.infinity,
