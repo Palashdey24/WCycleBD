@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,32 +8,19 @@ import 'package:wcycle_bd/model/local_cart_model.dart';
 import 'package:wcycle_bd/provider/local_cart_provider.dart';
 import 'package:wcycle_bd/provider/provider_scope/cartListItemProvider.dart';
 import 'package:wcycle_bd/screen/ui_view/shimmer/recycle_shimmer.dart';
+import 'package:wcycle_bd/widgets/cart_page/bottom_cart_price_ui.dart';
 import 'package:wcycle_bd/widgets/cart_page/cart_list_item.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/back_custom_button.dart';
 
-class CartPage extends ConsumerStatefulWidget {
+class CartPage extends ConsumerWidget {
   const CartPage({super.key});
 
   @override
-  ConsumerState<CartPage> createState() => _CartPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    //* This function for load cart data from local database
+    Future<List<LocalCartModel>?> loadCart =
+        ref.read(localCartIntiProvider.notifier).loadIntiCartData();
 
-class _CartPageState extends ConsumerState<CartPage> {
-  late Future<List<LocalCartModel>?> loadCart;
-  @override
-  void initState() {
-    super.initState();
-    loadCart = ref.read(localCartIntiProvider.notifier).loadIntiCartData();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    List<LocalCartModel> loadAllCart = ref.watch(localCartProvider).where(
-      (element) {
-        return element.userID == FirebaseAuth.instance.currentUser!.uid;
-      },
-    ).toList();
-    final sequenceAllCarts = loadAllCart.reversed.toList();
     Widget emptyCart = Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -56,58 +42,96 @@ class _CartPageState extends ConsumerState<CartPage> {
     );
     return Scaffold(
       backgroundColor: Colors.blueGrey,
-      body: ListView(
+      body: Stack(
         children: [
-          SizedBox(
-            height: DeviceSize.getDeviceHeight(context),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const BackCustomButton(),
-                Expanded(
-                  child: FutureBuilder(
-                    future: loadCart,
-                    builder: (context, snapshot) {
-                      {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                          case ConnectionState.none:
-                            return const SizedBox(
-                              height: 200,
-                              child: RecycleShimmer(),
-                            );
-                          case ConnectionState.active:
-                          case ConnectionState.done:
-                            //Add data to model list one after one
+          ListView(
+            children: [
+              SizedBox(
+                height: DeviceSize.getDeviceHeight(context) - 125,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const BackCustomButton(),
+                    Expanded(
+                      child: FutureBuilder(
+                        future: loadCart,
+                        builder: (context, snapshot) {
+                          {
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                              case ConnectionState.none:
+                                return const SizedBox(
+                                  height: 200,
+                                  child: RecycleShimmer(),
+                                );
+                              case ConnectionState.active:
+                              case ConnectionState.done:
+                                //Add data to model list one after one
 
-                            return (loadAllCart!.isNotEmpty)
-                                ? Consumer(builder: (context, ref, child) {
-                                    return ListView.builder(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 100),
-                                      itemCount: sequenceAllCarts.length,
-                                      itemBuilder: (context, index) {
-                                        return ProviderScope(
-                                          key: ValueKey(
-                                              sequenceAllCarts[index].id),
-                                          overrides: [
-                                            cartItemProvider.overrideWithValue(
-                                                sequenceAllCarts[index]),
-                                          ],
-                                          child: CartListItem(),
-                                        );
-                                      },
-                                    );
-                                  })
-                                : emptyCart;
-                        }
-                      }
-                    },
-                  ),
+                                return Consumer(builder: (context, ref, child) {
+                                  //* This list filter load cart data by UserId & newest cart order
+
+                                  final sequenceAllCarts =
+                                      ref.watch(localCartProvider);
+
+                                  List<String> cartStore = [];
+
+                                  //** This loop for filter unique cart store name from the all sequenceAllCarts list
+                                  for (var element in sequenceAllCarts) {
+                                    if (!cartStore.contains(
+                                        element.recycleShopModel!.storeName)) {
+                                      cartStore.add(
+                                          element.recycleShopModel!.storeName);
+                                    }
+                                  }
+                                  return sequenceAllCarts.isNotEmpty
+                                      ? ListView.builder(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 100),
+                                          itemCount: cartStore.length,
+                                          itemBuilder: (context, index) {
+                                            //* This list for filter out of List<LocalCartData> by store name
+                                            final cartsData = sequenceAllCarts
+                                                .where((element) {
+                                              return element.recycleShopModel!
+                                                      .storeName ==
+                                                  cartStore[index];
+                                            }).toList();
+
+                                            return ProviderScope(
+                                              key: ValueKey(
+                                                  sequenceAllCarts[index].id),
+                                              overrides: [
+                                                //* This below line sent individual item data from sequenceAllCarts
+
+                                                cartItemListProvider
+                                                    .overrideWithValue(
+                                                        cartsData),
+                                                cartStoreIDProvider
+                                                    .overrideWithValue(
+                                                        sequenceAllCarts[index]
+                                                            .id),
+                                                cartStoreProvider
+                                                    .overrideWithValue(
+                                                        cartStore[index]),
+                                              ],
+                                              child: const CartListItem(),
+                                            );
+                                          },
+                                        )
+                                      : emptyCart;
+                                });
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+          const Positioned(bottom: 0, child: BottomCartPriceUi()),
         ],
       ),
     );

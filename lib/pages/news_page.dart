@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:wcycle_bd/helper/device_size.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/news_model.dart';
 import 'package:wcycle_bd/screen/ui_view/shimmer/lt_shimmer.dart';
@@ -12,7 +11,7 @@ class NewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<NewsModel>? newsDataList = [];
-    final deviceWidth = DeviceSize.getDeviceWidth(context);
+
     return FutureBuilder(
         future: FirebaseFirestore.instance.collection("News").get(),
         builder: (context, snapshot) {

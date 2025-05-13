@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:wcycle_bd/data/model/remote/recycle_product_model.dart';
 import 'package:wcycle_bd/helper/device_size.dart';
-import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/screen/ui_view/shimmer/recycle_shimmer.dart';
@@ -18,8 +17,8 @@ class StoreProfileTabview extends StatelessWidget {
     List<RecycleProductModel> storeRecycleList = [];
 
     Widget productSection() {
-      void data() async {
-        final referenceCheck = await FirebaseFirestore.instance
+/*      void data() async {
+         await FirebaseFirestore.instance
             .collection("checking")
             .doc(storeId)
             .get()
@@ -31,7 +30,7 @@ class StoreProfileTabview extends StatelessWidget {
                 context, storeData?['storeData'].toString() ?? "N/A");
           },
         );
-      }
+      }*/
 
       return FutureBuilder(
         future: FirebaseFirestore.instance.collection("recycleProduct").get(),

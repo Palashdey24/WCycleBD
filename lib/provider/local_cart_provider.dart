@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wcycle_bd/data/model/local/cart_database.dart';
+import 'package:wcycle_bd/helper/firebase_helper.dart';
 import 'package:wcycle_bd/model/local_cart_model.dart';
 import 'package:wcycle_bd/provider/recycable_fs_data.dart';
 import 'package:wcycle_bd/provider/store_fs_data.dart';
@@ -12,15 +13,24 @@ class LocalCartIntiProviderNotifier
     final db = await CartDatabase.getDatabase();
     final cartDatabase = await db.query("carts");
 
-    final cartData = cartDatabase
-        .map((e) => LocalCartModel(
-            id: e['id'] as String,
-            userID: e['userID'] as String,
-            productId: e['productId'] as String,
-            storeId: e['storeId'] as String,
-            quantity: e['quantity'] as int))
-        .toList();
-    state = cartData;
+    if (cartDatabase.isEmpty) {
+      return null;
+    }
+    final cartData = cartDatabase.map((e) {
+      return LocalCartModel(
+          id: e['id'] as String,
+          userID: e['userID'] as String,
+          productId: e['productId'] as String,
+          storeId: e['storeId'] as String,
+          quantity: e['quantity'] as int);
+    }).toList();
+
+    final cartDataById = cartData.where(
+      (element) {
+        return element.userID == FirebaseHelper.userId;
+      },
+    ).toList();
+    state = cartDataById.reversed.toList();
     return cartData;
   }
 }
@@ -56,7 +66,7 @@ final localCartProvider = Provider<List<LocalCartModel>>((ref) {
         storeId: e.storeId,
         quantity: e.quantity,
         recycleShopModel: storeDatastore,
-        recycleProductModel: recycleProductData);
+        recycleProductModel: recycleProductData.copyWith(quantity: e.quantity));
   }).toList();
 
   return localCartData;

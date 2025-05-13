@@ -13,6 +13,15 @@ class CreateEventsItem extends StatelessWidget {
   const CreateEventsItem({super.key, required this.litteredModel});
   final LitteredModel litteredModel;
 
+  static String? checkVaild(
+      {required BuildContext context,
+      String? value,
+      required String failurMsg}) {
+    if (value == null || value.trim().isEmpty || value.trim().length < 3) {
+      return failurMsg;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     late String eventTittle;
@@ -34,7 +43,6 @@ class CreateEventsItem extends StatelessWidget {
 
     final formKey = GlobalKey<FormState>();
     String ltImage = ltSrc;
-    String userID = FirebaseHelper.firebaseAuth.currentUser?.uid ?? "null";
 
     late final String ltId;
     void getLitterId() async {
@@ -58,7 +66,7 @@ class CreateEventsItem extends StatelessWidget {
           final eventCollection =
               FirebaseHelper.fireStore.collection("events").doc();
           //Sent Littered data by Map to FirebaseHelper class where the function upload the data
-          final upData = FirebaseHelper.upFirestoreDataWithID({
+          FirebaseHelper.upFirestoreDataWithID({
             "userId": FirebaseHelper.firebaseAuth.currentUser!.uid,
             "createTimeStamp": DateTime.now(),
             "litteredAddress": litteredAddress,
@@ -84,6 +92,7 @@ class CreateEventsItem extends StatelessWidget {
                   .doc(ltId)
                   .update({"productOnline": false}).then(
                 (value) {
+                  if (!context.mounted) return;
                   DialogsHelper.showMessage(context, "Data Added Successfully");
                   Navigator.pop(context);
                 },
@@ -133,12 +142,11 @@ class CreateEventsItem extends StatelessWidget {
                           isEnable: false,
                           intValue: litteredModel.litteredTittle,
                           vaildator: (value) {
-                            if (value == null ||
-                                value.trim().isEmpty ||
-                                value.trim().length < 3) {
-                              return "Please add A event Tittle";
-                            }
-                            eventTittle = value;
+                            checkVaild(
+                                context: context,
+                                value: value,
+                                failurMsg: "Please add A event Tittle");
+                            eventTittle = value!;
                             return null;
                           }),
                       const Gap(csGap + 20),

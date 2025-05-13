@@ -6,7 +6,7 @@ const String appLogo = "assets/wcycle-bd-hd_logo.png";
 final dateFormtter = DateFormat.yMMMEd();
 
 String getSqlTableName(String? uId) {
-  final tableName = "newcarts";
+  const tableName = "newcarts";
   return tableName;
 }
 

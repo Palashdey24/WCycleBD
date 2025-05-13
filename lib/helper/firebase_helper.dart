@@ -13,6 +13,8 @@ class FirebaseHelper {
   static final firebaseAuth = FirebaseAuth.instance;
   static final fireStore = FirebaseFirestore.instance;
 
+  static final userId = firebaseAuth.currentUser!.uid;
+
   //Only for camera and gallery image
   static Future<String> uploadImage(String folder, String subFolder,
       PickedFile pickImgFile, File pickfile) async {

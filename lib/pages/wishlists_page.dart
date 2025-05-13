@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wcycle_bd/helper/device_size.dart';
@@ -26,12 +28,13 @@ class WishlistsPage extends ConsumerWidget {
                 Expanded(
                   child: Consumer(builder: (context, ref, child) {
                     final wishlists = ref.watch(localWishProvider);
-                    return ListView.builder(
-                      padding: const EdgeInsets.only(bottom: 100),
-                      itemCount: wishlists.length,
-                      itemBuilder: (context, index) {
-                        return wishlists.isNotEmpty
-                            ? ProviderScope(
+                    log(wishlists.length);
+                    return wishlists.isNotEmpty
+                        ? ListView.builder(
+                            padding: const EdgeInsets.only(bottom: 100),
+                            itemCount: wishlists.length,
+                            itemBuilder: (context, index) {
+                              return ProviderScope(
                                 key: ValueKey<String>(
                                     wishlists[index].productID),
                                 overrides: [
@@ -39,10 +42,13 @@ class WishlistsPage extends ConsumerWidget {
                                       .overrideWithValue(wishlists[index]),
                                 ],
                                 child: const WishListItem(),
-                              )
-                            : const Center(child: Text("No Wishlist Items"));
-                      },
-                    );
+                              );
+                            },
+                          )
+                        : const Center(
+                            child: Text("No Wishlist Items",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20)));
                   }),
                 ),
               ],

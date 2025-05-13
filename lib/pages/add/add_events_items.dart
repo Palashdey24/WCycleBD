@@ -5,6 +5,7 @@ import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/firebase_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/pages/add/reuse/firebase_dropdown_helper.dart';
+import 'package:wcycle_bd/widgets/reusable_widgets/back_custom_button.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/division_dropdown.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/form_text_outlined.dart';
 import 'package:wcycle_bd/widgets/reusable_widgets/time_date_collector.dart';
@@ -51,7 +52,6 @@ class AddEventsItems extends StatelessWidget {
 
     final formKey = GlobalKey<FormState>();
     String? ltImage;
-    String userID = FirebaseHelper.firebaseAuth.currentUser?.uid ?? "null";
 
     void onSave() {
       if (formKey.currentState!.validate()) {
@@ -66,7 +66,7 @@ class AddEventsItems extends StatelessWidget {
           final eventsData =
               FirebaseHelper.fireStore.collection("events").doc();
 
-          final upData = FirebaseHelper.upFirestoreDataWithID(
+          FirebaseHelper.upFirestoreDataWithID(
             {
               "userId": FirebaseHelper.firebaseAuth.currentUser!.uid,
               "createTimeStamp": DateTime.now(),
@@ -98,161 +98,159 @@ class AddEventsItems extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(),
-      body: Card(
-        elevation: 10,
-        shape: const RoundedRectangleBorder(
-            side: BorderSide(color: Colors.orange, width: 3),
-            borderRadius: BorderRadius.all(Radius.circular(45))),
-        color: Colors.blueGrey,
-        child: Form(
-            key: formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: ListView(
-                children: [
-                  const Gap(largeGap),
-                  UploadImage(
-                    storageRef: "Events",
-                    downloadUriFn: (uri) => ltImage = uri,
-                  ),
-                  const Gap(csGap),
-                  FormTextOutlined(
+      backgroundColor: Colors.blueGrey,
+      body: Form(
+          key: formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Stack(
+              children: [
+                ListView(
+                  children: [
+                    const Gap(largeGap),
+                    UploadImage(
+                      storageRef: "Events",
+                      downloadUriFn: (uri) => ltImage = uri,
+                    ),
+                    const Gap(csGap),
+                    FormTextOutlined(
+                        iconData: FontAwesomeIcons.recycle,
+                        fieldlabel: "Events Tittle",
+                        fieldHint: "Please add event Tittle like we save tree",
+                        fieldType: TextInputType.text,
+                        vaildator: (value) {
+                          if (value == null ||
+                              value.trim().isEmpty ||
+                              value.trim().length < 3) {
+                            return "Please add A event Tittle";
+                          }
+                          eventTittle = value;
+                          return null;
+                        }),
+                    const Gap(csGap + 20),
+                    FormTextOutlined(
                       iconData: FontAwesomeIcons.recycle,
-                      fieldlabel: "Events Tittle",
-                      fieldHint: "Please add event Tittle like we save tree",
+                      fieldlabel: "Address",
+                      fieldHint: "Please add Littered Spot Address",
                       fieldType: TextInputType.text,
-                      vaildator: (value) {
-                        if (value == null ||
-                            value.trim().isEmpty ||
-                            value.trim().length < 3) {
-                          return "Please add A event Tittle";
-                        }
-                        eventTittle = value;
-                        return null;
-                      }),
-                  const Gap(csGap + 20),
-                  FormTextOutlined(
-                    iconData: FontAwesomeIcons.recycle,
-                    fieldlabel: "Address",
-                    fieldHint: "Please add Littered Spot Address",
-                    fieldType: TextInputType.text,
-                    maxLen: 72,
-                    onSave: (value) => ltAddress = value,
-                    vaildator: (value) =>
-                        vaildetForms(value, "Address", "Address"),
-                  ),
-                  const Gap(csGap + 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: DivisionDropdown(
-                          onDropdownFn: (value) {
-                            ltDivision = value;
-                          },
-                          formFieldValidator: (value) =>
-                              vaildetForms(value, "Division", "Division"),
-                          dropLevel: "Division",
-                          dropHint: "select Division",
-                          onSaved: (p0) => ltDivision = p0!,
+                      maxLen: 72,
+                      onSave: (value) => ltAddress = value,
+                      vaildator: (value) =>
+                          vaildetForms(value, "Address", "Address"),
+                    ),
+                    const Gap(csGap + 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: DivisionDropdown(
+                            onDropdownFn: (value) {
+                              ltDivision = value;
+                            },
+                            formFieldValidator: (value) =>
+                                vaildetForms(value, "Division", "Division"),
+                            dropLevel: "Division",
+                            dropHint: "select Division",
+                            onSaved: (p0) => ltDivision = p0!,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: FirebaseDropdownHelper(
-                          onDropdownFn: (value) {
-                            impactLevel = value;
-                          },
-                          dropHint: "Impact Level",
-                          dropLevel: "Impact Level",
-                          fsCollection: "imapctLevel",
-                          fsField: "level",
+                        Expanded(
+                          child: FirebaseDropdownHelper(
+                            onDropdownFn: (value) {
+                              impactLevel = value;
+                            },
+                            dropHint: "Impact Level",
+                            dropLevel: "Impact Level",
+                            fsCollection: "imapctLevel",
+                            fsField: "level",
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const Gap(largeGap),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FormTextOutlined(
-                          iconData: FontAwesomeIcons.recycle,
-                          fieldlabel: "Village/Metro",
-                          fieldHint: "Please add Village or Metro name",
-                          fieldType: TextInputType.text,
-                          maxLen: 18,
-                          onSave: (value) => ltVillMet = value,
-                          vaildator: (value) =>
-                              vaildetForms(value, "Village", "Village"),
-                        ),
-                      ),
-                      const Gap(csGap),
-                      Expanded(
-                        child: FormTextOutlined(
+                      ],
+                    ),
+                    const Gap(largeGap),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: FormTextOutlined(
                             iconData: FontAwesomeIcons.recycle,
-                            fieldlabel: "Thana",
-                            fieldHint: "Please add Thana",
+                            fieldlabel: "Village/Metro",
+                            fieldHint: "Please add Village or Metro name",
                             fieldType: TextInputType.text,
                             maxLen: 18,
-                            onSave: (value) => ltThana = value,
+                            onSave: (value) => ltVillMet = value,
                             vaildator: (value) =>
-                                vaildetForms(value, "Thana", "Thana")),
-                      ),
-                    ],
-                  ),
-                  const Gap(csGap),
-                  FormTextOutlined(
-                      iconData: FontAwesomeIcons.recycle,
-                      fieldlabel: "Ward",
-                      fieldHint: "Please add a Ward",
-                      fieldType: TextInputType.number,
-                      onSave: (value) => ltWard = value,
-                      vaildator: (value) => vaildWard(value)),
-                  const Gap(csGap + 20),
-                  FormTextOutlined(
-                      iconData: FontAwesomeIcons.prescriptionBottleMedical,
-                      fieldlabel: "Descriptions",
-                      fieldHint: "Please add Descriptions",
-                      fieldType: TextInputType.text,
-                      maxLen: 256,
-                      maxLines: 7,
-                      vaildator: (value) {
-                        if (value == null ||
-                            value.trim().isEmpty ||
-                            value.trim().length < 3) {
-                          return "Please add A Descriptions";
-                        }
-                        eventDescription = value;
-                        return null;
-                      }),
-                  const Gap(csGap + 20),
-                  TimeDateCollector(
-                    onSelDate: (date) {
-                      eventDate = date;
-                    },
-                    onSelTime: (time) {
-                      eventTime = time;
-                    },
-                  ),
-                  const Gap(largeGap),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton.icon(
-                          onPressed: () => formKey.currentState!.reset(),
-                          icon: const Icon(Icons.refresh),
-                          label: const Text("Reset")),
-                      const Spacer(),
-                      ElevatedButton.icon(
-                          onPressed: onSave,
-                          icon: const Icon(Icons.data_saver_on_rounded),
-                          label: const Text("Save")),
-                    ],
-                  ),
-                ],
-              ),
-            )),
-      ),
+                                vaildetForms(value, "Village", "Village"),
+                          ),
+                        ),
+                        const Gap(csGap),
+                        Expanded(
+                          child: FormTextOutlined(
+                              iconData: FontAwesomeIcons.recycle,
+                              fieldlabel: "Thana",
+                              fieldHint: "Please add Thana",
+                              fieldType: TextInputType.text,
+                              maxLen: 18,
+                              onSave: (value) => ltThana = value,
+                              vaildator: (value) =>
+                                  vaildetForms(value, "Thana", "Thana")),
+                        ),
+                      ],
+                    ),
+                    const Gap(csGap),
+                    FormTextOutlined(
+                        iconData: FontAwesomeIcons.recycle,
+                        fieldlabel: "Ward",
+                        fieldHint: "Please add a Ward",
+                        fieldType: TextInputType.number,
+                        onSave: (value) => ltWard = value,
+                        vaildator: (value) => vaildWard(value)),
+                    const Gap(csGap + 20),
+                    FormTextOutlined(
+                        iconData: FontAwesomeIcons.prescriptionBottleMedical,
+                        fieldlabel: "Descriptions",
+                        fieldHint: "Please add Descriptions",
+                        fieldType: TextInputType.text,
+                        maxLen: 256,
+                        maxLines: 7,
+                        vaildator: (value) {
+                          if (value == null ||
+                              value.trim().isEmpty ||
+                              value.trim().length < 3) {
+                            return "Please add A Descriptions";
+                          }
+                          eventDescription = value;
+                          return null;
+                        }),
+                    const Gap(csGap + 20),
+                    TimeDateCollector(
+                      onSelDate: (date) {
+                        eventDate = date;
+                      },
+                      onSelTime: (time) {
+                        eventTime = time;
+                      },
+                    ),
+                    const Gap(largeGap),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton.icon(
+                            onPressed: () => formKey.currentState!.reset(),
+                            icon: const Icon(Icons.refresh),
+                            label: const Text("Reset")),
+                        const Spacer(),
+                        ElevatedButton.icon(
+                            onPressed: onSave,
+                            icon: const Icon(Icons.data_saver_on_rounded),
+                            label: const Text("Save")),
+                      ],
+                    ),
+                  ],
+                ),
+                const Positioned(top: csGap, child: BackCustomButton()),
+              ],
+            ),
+          )),
     );
   }
 }

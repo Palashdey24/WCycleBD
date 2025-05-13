@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
-import 'package:wcycle_bd/helper/sqlflite_helper.dart';
+import 'package:wcycle_bd/helper/sqlite_helper.dart';
 import 'package:wcycle_bd/provider/local_wishlist_provider.dart';
 import 'package:wcycle_bd/provider/recycable_provider.dart';
 import 'package:wcycle_bd/provider/recycle_recommend_provider.dart';
@@ -23,7 +23,6 @@ class RecycleProductDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ValueNotifier<bool> isWish = ValueNotifier(false);
     final rcLM = ref.read(recycableProvider);
     final rcLMFn = ref.read(recycableProvider.notifier);
     ref.read(recyclerecommendProvider.notifier).recommendate(
@@ -31,17 +30,6 @@ class RecycleProductDetails extends ConsumerWidget {
         );
 
     final rcRecommend = ref.watch(recyclerecommendProvider);
-    final wishList = ref.watch(localWishProvider);
-
-    wishList.any((element) {
-      if (element.productID == rcLM.productID) {
-        isWish.value = true;
-        return true;
-      } else {
-        isWish.value = false;
-        return false;
-      }
-    });
 
     return Scaffold(
       floatingActionButton: const Padding(
@@ -118,26 +106,32 @@ class RecycleProductDetails extends ConsumerWidget {
                           ),
                           Positioned(
                             right: 5,
-                            child: ValueListenableBuilder(
-                                valueListenable: isWish,
-                                builder: (context, value, child) {
-                                  return GestureDetector(
-                                    onTap: () => !isWish.value
-                                        ? SqlfliteHelper.addWishList(
-                                            rcLM.productID, context)
-                                        : SqlfliteHelper.removeWishList(
-                                            rcLM.productID, context),
-                                    child: CircleAvatar(
-                                      radius: 17,
-                                      child: Icon(
-                                        Icons.favorite_rounded,
-                                        color: isWish.value
-                                            ? Colors.red
-                                            : Colors.white,
-                                      ),
-                                    ),
-                                  );
-                                }),
+                            child: Consumer(builder: (context, ref, child) {
+                              final wishList = ref.watch(localWishProvider);
+
+                              bool inWish = wishList.any((element) {
+                                if (element.productID == rcLM.productID) {
+                                  return true;
+                                } else {
+                                  return false;
+                                }
+                              });
+
+                              return GestureDetector(
+                                onTap: () => !inWish
+                                    ? SQLiteHelper.addWishList(
+                                        rcLM.productID, context)
+                                    : SQLiteHelper.removeWishList(
+                                        rcLM.productID, context),
+                                child: CircleAvatar(
+                                  radius: 17,
+                                  child: Icon(
+                                    Icons.favorite_rounded,
+                                    color: inWish ? Colors.red : Colors.white,
+                                  ),
+                                ),
+                              );
+                            }),
                           ),
                         ],
                       ),

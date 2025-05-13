@@ -31,7 +31,7 @@ class BottomFloatingWidgets extends StatelessWidget {
                 borderRadius: const BorderRadius.all(
                   Radius.circular(16.0),
                 ),
-                border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
               ),
               child: const Icon(
                 Icons.add,

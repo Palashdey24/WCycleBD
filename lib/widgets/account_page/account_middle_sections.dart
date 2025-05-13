@@ -20,7 +20,7 @@ class AccountMiddleSections extends StatelessWidget {
         btFn: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => WishlistsPage(),
+              builder: (context) => const WishlistsPage(),
             )),
       ),
       AccountOptionModel(

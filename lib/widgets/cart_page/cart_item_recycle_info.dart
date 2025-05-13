@@ -1,52 +1,97 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wcycle_bd/data/model/remote/recycle_product_model.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
+import 'package:wcycle_bd/helper/sqlite_helper.dart';
+import 'package:wcycle_bd/provider/order_cookies_provider.dart';
 
-class CartItemRecycleInfo extends StatefulWidget {
+class CartItemRecycleInfo extends ConsumerWidget {
   const CartItemRecycleInfo(
-      {super.key, required this.quantity, this.recycleProductModel});
+      {super.key,
+      required this.quantity,
+      this.recycleProductModel,
+      required this.onTap,
+      required this.cartID});
 
   final int quantity;
+  final String cartID;
+
   final RecycleProductModel? recycleProductModel;
+  final void Function(bool selected) onTap;
 
   @override
-  State<CartItemRecycleInfo> createState() => _CartItemRecycleInfoState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    int? cartQuantity;
 
-class _CartItemRecycleInfoState extends State<CartItemRecycleInfo> {
-  int? cartItem;
+    bool selectCart = false;
 
-  bool selectCart = false;
+    cartQuantity ?? (cartQuantity = quantity);
 
-  @override
-  Widget build(BuildContext context) {
-    cartItem ?? (cartItem = widget.quantity);
+    // * This line for see if the product already select for checkout or Not
+    selectCart = ref.read(orderCookiesProvider).any(
+          (element) => element.products.any(
+            (element) => element.productID == recycleProductModel!.productID,
+          ),
+        );
 
     void onCartPlusFn() {
-      if (cartItem! < 15) {
-        setState(() {
-          cartItem = (cartItem! + 1);
-        });
+      if (cartQuantity! < 15) {
+        cartQuantity = (cartQuantity! + 1);
+
+        //* This line for update cart item Quantity in Local database
+        SQLiteHelper.updateCartItem(cartID, context, cartQuantity!);
+
+        if (selectCart) {
+          //* If product already on select for checkout then update the quantity and price in provider
+          ref
+              .read(orderCookiesProvider.notifier)
+              .updateQuantity(
+                  isPlus: true,
+                  productID: recycleProductModel!.productID,
+                  storeId: recycleProductModel!.shopID,
+                  quantity: cartQuantity!)
+              .then(
+            (value) {
+              ref.read(totalPriceProvider.notifier).updateTotalPrice(value!);
+            },
+          );
+        }
       } else {
         DialogsHelper.showMessage(
           context,
           "Can't add more than 15 item",
         );
       }
+
+      return;
     }
 
     // ? This function for cart minus
 
     void onCartMinusFn() {
-      if (cartItem! > 1) {
-        setState(() {
-          cartItem = cartItem! - 1;
-        });
+      if (cartQuantity! > 1) {
+        cartQuantity = cartQuantity! - 1;
+        //* This line for update minus cart item Quantity in Local database
+        SQLiteHelper.updateCartItem(cartID, context, cartQuantity!);
+
+        if (selectCart) {
+          //* also updated the total price in provider
+          ref
+              .read(orderCookiesProvider.notifier)
+              .updateQuantity(
+                  isPlus: false,
+                  productID: recycleProductModel!.productID,
+                  storeId: recycleProductModel!.shopID,
+                  quantity: cartQuantity!)
+              .then(
+                (value) => ref
+                    .read(totalPriceProvider.notifier)
+                    .updateTotalPrice(value!),
+              );
+        }
       } else {
         DialogsHelper.showMessage(
           context,
@@ -58,27 +103,27 @@ class _CartItemRecycleInfoState extends State<CartItemRecycleInfo> {
     return Flex(
       direction: Axis.horizontal,
       children: [
-        Radio(
+        Checkbox(
           value: selectCart,
-          groupValue: selectCart,
-          fillColor: WidgetStateProperty.all(Colors.white),
-          activeColor: Colors.green,
+          tristate: false,
+          checkColor: Colors.orange,
+          activeColor: Colors.black,
+          shape: const StarBorder.polygon(),
           onChanged: (value) {
             selectCart = value!;
-            log(value.toString());
+            onTap(selectCart);
           },
         ),
         Expanded(
             flex: 20,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(normalGap),
-              child: widget.recycleProductModel?.productImage == null
+              child: recycleProductModel?.productImage == null
                   ? Image.asset(
                       "assets/metal-field.jpg",
                     )
                   : CachedNetworkImage(
-                      height: 50,
-                      imageUrl: widget.recycleProductModel!.productImage),
+                      height: 50, imageUrl: recycleProductModel!.productImage),
             )),
         Expanded(
           flex: 50,
@@ -94,15 +139,15 @@ class _CartItemRecycleInfoState extends State<CartItemRecycleInfo> {
                     spacing: 5,
                     children: [
                       Text(
-                        widget.recycleProductModel?.productName ?? "Plastic",
+                        recycleProductModel?.productName ?? "Plastic",
                         style: const TextStyle(color: Colors.white),
                       ),
                       Text(
-                        "\$ ${cartItem ?? widget.quantity} x ${widget.recycleProductModel?.productPrice}",
+                        "\$ ${cartQuantity ?? quantity} x ${recycleProductModel?.productPrice}",
                         style: const TextStyle(color: Colors.grey),
                       ),
                       Text(
-                        "\$ ${(cartItem! * (widget.recycleProductModel?.productPrice ?? 1)).toStringAsFixed(2)}",
+                        "\$ ${(cartQuantity! * (recycleProductModel?.productPrice ?? 1)).toStringAsFixed(2)}",
                         style: const TextStyle(color: Colors.orange),
                       ),
                     ],
@@ -111,32 +156,54 @@ class _CartItemRecycleInfoState extends State<CartItemRecycleInfo> {
               ),
               Expanded(
                   flex: 20,
-                  child: Wrap(
+                  child: Flex(
+                    direction: Axis.vertical,
                     spacing: 5,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: onCartMinusFn,
-                        child: const CircleAvatar(
-                          radius: normalGap,
-                          child: FaIcon(
-                            FontAwesomeIcons.minus,
-                            size: normalGap,
-                          ),
-                        ),
+                        onTap: () {
+                          //* This line for remove item from local database and also update the provider
+                          SQLiteHelper.removeCartItem(
+                              recycleProductModel!.productID, context);
+                          if (selectCart) {
+                            ref
+                                .read(orderCookiesProvider.notifier)
+                                .removeOrder(recycleProductModel!);
+                          }
+                        },
+                        child: const FaIcon(FontAwesomeIcons.trashCan,
+                            size: 20, color: Colors.black),
                       ),
-                      Text(
-                        "${cartItem ?? widget.quantity}",
-                        style: const TextStyle(color: Colors.lime),
-                      ),
-                      GestureDetector(
-                        onTap: onCartPlusFn,
-                        child: const CircleAvatar(
-                          radius: normalGap,
-                          child: FaIcon(
-                            FontAwesomeIcons.plus,
-                            size: normalGap,
+                      Wrap(
+                        spacing: 5,
+                        children: [
+                          GestureDetector(
+                            onTap: onCartMinusFn,
+                            child: const CircleAvatar(
+                              radius: normalGap,
+                              child: FaIcon(
+                                FontAwesomeIcons.minus,
+                                size: normalGap,
+                              ),
+                            ),
                           ),
-                        ),
+                          Text(
+                            "${cartQuantity ?? quantity}",
+                            style: const TextStyle(color: Colors.lime),
+                          ),
+                          GestureDetector(
+                            onTap: onCartPlusFn,
+                            child: const CircleAvatar(
+                              radius: normalGap,
+                              child: FaIcon(
+                                FontAwesomeIcons.plus,
+                                size: normalGap,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ))

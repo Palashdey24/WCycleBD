@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
-import 'package:wcycle_bd/helper/sqlflite_helper.dart';
+import 'package:wcycle_bd/helper/sqlite_helper.dart';
 import 'package:wcycle_bd/provider/provider_scope/wishListItemProvider.dart';
 import 'package:wcycle_bd/provider/recycable_provider.dart';
 import 'package:wcycle_bd/screen/ui_view/details/recycable_product_details.dart';
@@ -75,7 +75,7 @@ class WishListItem extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                            onPressed: () => SqlfliteHelper.removeWishList(
+                            onPressed: () => SQLiteHelper.removeWishList(
                                 productData.productID, context),
                             icon: const FaIcon(
                               FontAwesomeIcons.trash,

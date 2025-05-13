@@ -15,7 +15,7 @@ class BottomFloatingWidgetLt extends ConsumerWidget {
     ref
         .read(currentUserdataProvider.notifier)
         .intiValue(context, FirebaseHelper.firebaseAuth.currentUser!.uid);
-    final user = ref.watch(currentUserdataProvider);
+    ref.watch(currentUserdataProvider);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Flex(

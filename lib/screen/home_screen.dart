@@ -1,9 +1,12 @@
 import 'dart:core';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wcycle_bd/api/apis.dart';
+import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/nav_item_model.dart';
 import 'package:wcycle_bd/pages/account_page.dart';
 import 'package:wcycle_bd/pages/cart_page.dart';
@@ -65,15 +68,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30))),
         elevation: 0,
-        backgroundColor: kDefaultColor.withOpacity(0.1),
+        backgroundColor: kDefaultColor.withValues(alpha: 0.1),
         centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              setState(() {});
-            },
-            icon: const CircleAvatar(
-              backgroundImage: AssetImage("assets/PersonAvater.png"),
-            )),
+        leading: Card(
+          clipBehavior: Clip.hardEdge,
+          margin: const EdgeInsets.all(normalGap),
+          child: CachedNetworkImage(
+            width: 10,
+            height: 10,
+            fit: BoxFit.cover,
+            imageUrl: userInfo.imgUri,
+            errorWidget: (context, url, error) => const FaIcon(
+              FontAwesomeIcons.user,
+            ),
+          ),
+        ),
         actions: [
           IconButton(
               onPressed: () {},

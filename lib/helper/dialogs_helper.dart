@@ -11,6 +11,7 @@ class DialogsHelper {
       ),
       backgroundColor: Colors.black,
       behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 2),
     ));
   }
 

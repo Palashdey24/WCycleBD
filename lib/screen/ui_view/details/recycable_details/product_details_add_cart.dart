@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wcycle_bd/data/model/local/cart_database.dart';
 import 'package:wcycle_bd/helper/device_size.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
-import 'package:wcycle_bd/pages/cart_page.dart';
+import 'package:wcycle_bd/helper/sqlite_helper.dart';
+import 'package:wcycle_bd/provider/local_cart_provider.dart';
 import 'package:wcycle_bd/provider/recycable_provider.dart';
 import 'package:wcycle_bd/screen/ui_view/details/recycable_details/custom_plus_minus_item_core.dart';
 
@@ -21,62 +21,36 @@ class ProductDetailsAddCart extends ConsumerWidget {
     super.key,
   });
 
-  static void addCartSql(BuildContext context, String randomId, String storeId,
-      String productId, int quantity, String userId) async {
-    DialogsHelper.showProgressBar(context);
-
-    final db = await CartDatabase.getDatabase();
-
-    await db.insert("carts", {
-      "id": randomId,
-      "userID": userId,
-      "productId": productId,
-      "storeId": storeId,
-      "quantity": quantity
-    }).then(
-      (value) {
-        if (value >= 1 && context.mounted) {
-          Navigator.pop(context);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const CartPage(),
-              ));
-          return;
-        }
-        if (!context.mounted) return;
-        Navigator.pop(context);
-
-        DialogsHelper.showMessage(context, "Something went wrong");
-        return;
-      },
-    ).onError(
-      (error, stackTrace) {
-        if (!context.mounted) return;
-        Navigator.pop(context);
-        DialogsHelper.showMessage(context, "Something went wrong $error");
-      },
-    );
-
-    return;
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    String? previousId;
     final randomId = uuid.v4();
     final userId = FirebaseAuth.instance.currentUser!.uid;
     final phoneWidth = DeviceSize.getDeviceWidth(context);
     ValueNotifier<int> cartItem = ValueNotifier<int>(0);
-    final rcLM = ref.read(recycableProvider);
+    final rcLM = ref.watch(recycableProvider);
+
+    final cartList = ref.read(localCartProvider);
+
+    final inCart = cartList.any((element) {
+      if (element.productId == rcLM.productID) {
+        cartItem.value = element.quantity;
+        previousId = element.id;
+        return true;
+      } else {
+        cartItem.value = 0;
+        return false;
+      }
+    });
 
     // ? This function for cart plus
     void onAddCartFn(int quantity) async {
-      if (quantity == 0) {
+      if (cartItem.value == 0) {
         cartItem.value++;
         return;
       } else {
-        addCartSql(
-            context, randomId, rcLM.shopID, rcLM.productID, quantity, userId);
+        SQLiteHelper.addCartSql(context, randomId, rcLM.shopID, rcLM.productID,
+            quantity, userId, inCart, previousId);
       }
     }
 
