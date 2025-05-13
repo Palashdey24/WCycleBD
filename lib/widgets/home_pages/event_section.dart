@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:wcycle_bd/helper/firebase_helper.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/model/event_model.dart';
@@ -25,6 +26,22 @@ class EventSection extends ConsumerWidget {
         .get();
     List<EventModel> eventListData = [];
     final user = ref.read(currentUserdataProvider);
+
+    List<EventModel> eventFn(List<EventModel> data) {
+      if (user.individual == false) {
+        return data;
+      }
+      return data.where(
+        (element) {
+          final now = DateTime.now();
+          final eventTime =
+              DateFormat('yMMMEd').parse(element.eventsDate!.trim());
+          final isExpired = eventTime.isBefore(now);
+          return !isExpired;
+        },
+      ).toList();
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -56,15 +73,13 @@ class EventSection extends ConsumerWidget {
 
                     //Add data to model list one after one
 
-                    eventListData = datas
+                    final data = datas
                         .map(
                           (e) => EventModel.fromJson(e.data()),
                         )
                         .toList();
 
-/*                    for (var inout in datas!) {
-                      ltModel.add(LitteredModel.fromJson(inout.data()));
-                    }*/
+                    eventListData = eventFn(data);
                 }
 
                 return eventListData.isNotEmpty

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:wcycle_bd/api/apis.dart';
 import 'package:wcycle_bd/model/event_model.dart';
+import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 import 'package:wcycle_bd/provider/indiviual_user_fs_provider.dart';
 import 'package:wcycle_bd/screen/ui_view/details/events_details.dart';
 import 'package:wcycle_bd/widgets/home_pages/even_date_show.dart';
@@ -21,6 +23,14 @@ class EventsListItem extends ConsumerWidget {
     String year = eventsDate.substring(eventsDate.lastIndexOf(" ") + 1);
     List<String> splitted = eventsDate.split(",");
     List<String> dayMonth = splitted[1].split(" ");
+
+    // ? This is for expired event check from eventDate
+
+    final now = DateTime.now();
+    final eventTime = DateFormat('yMMMEd').parse(eventsDate);
+    final isExpired = eventTime.isBefore(now);
+
+    final user = ref.read(currentUserdataProvider);
 
     return InkWell(
       onTap: () {
@@ -65,6 +75,8 @@ class EventsListItem extends ConsumerWidget {
                   EvenDateShow(dmyTxt: dayMonth[2]),
                   EvenDateShow(dmyTxt: dayMonth[1]),
                   EvenDateShow(dmyTxt: year),
+                  if (user.individual == false)
+                    EvenDateShow(dmyTxt: isExpired.toString()),
                 ],
               )),
         ],

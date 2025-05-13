@@ -7,38 +7,11 @@ import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/account_option_model.dart';
 import 'package:wcycle_bd/pages/home_page.dart';
+import 'package:wcycle_bd/pages/order_page.dart';
 import 'package:wcycle_bd/pages/profile_page.dart';
 import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 
 final fontHelper = FontHelper();
-
-final accountOption = [
-  AccountOptionModel(
-      optionLabel: "Order",
-      iconColors: Colors.amberAccent,
-      iconData: Icons.inventory_rounded,
-      btWidgets: const HomePage()),
-  AccountOptionModel(
-      optionLabel: "Profile",
-      iconColors: Colors.amberAccent,
-      iconData: FontAwesomeIcons.usersRectangle,
-      btWidgets: const ProfilePage()),
-  AccountOptionModel(
-      optionLabel: "Address",
-      iconColors: Colors.blueAccent,
-      iconData: FontAwesomeIcons.addressBook,
-      btWidgets: const HomePage()),
-  AccountOptionModel(
-      optionLabel: "Setting",
-      iconColors: Colors.grey,
-      iconData: FontAwesomeIcons.seedling,
-      btWidgets: const HomePage()),
-  AccountOptionModel(
-      optionLabel: "Payment",
-      iconColors: Colors.indigo,
-      iconData: FontAwesomeIcons.paypal,
-      btWidgets: const HomePage()),
-];
 
 class AccountTopScetions extends ConsumerWidget {
   const AccountTopScetions({super.key});
@@ -46,6 +19,38 @@ class AccountTopScetions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final users = ref.watch(currentUserdataProvider);
+
+    final accountOption = [
+      AccountOptionModel(
+        optionLabel: "Order",
+        iconColors: Colors.amberAccent,
+        iconData: Icons.inventory_rounded,
+        btFn: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const OrderPage()));
+        },
+      ),
+      AccountOptionModel(
+          optionLabel: "Profile",
+          iconColors: Colors.amberAccent,
+          iconData: FontAwesomeIcons.usersRectangle,
+          btWidgets: const ProfilePage()),
+      AccountOptionModel(
+          optionLabel: "Address",
+          iconColors: Colors.blueAccent,
+          iconData: FontAwesomeIcons.addressBook,
+          btWidgets: const HomePage()),
+      AccountOptionModel(
+          optionLabel: "Setting",
+          iconColors: Colors.grey,
+          iconData: FontAwesomeIcons.seedling,
+          btWidgets: const HomePage()),
+      AccountOptionModel(
+          optionLabel: "Payment",
+          iconColors: Colors.indigo,
+          iconData: FontAwesomeIcons.paypal,
+          btWidgets: const HomePage()),
+    ];
 
     return SizedBox(
       width: double.infinity,
@@ -116,6 +121,10 @@ class AccountTopScetions extends ConsumerWidget {
                   for (var accOptions in accountOption)
                     InkWell(
                       onTap: () {
+                        if (accOptions.btFn != null) {
+                          accOptions.btFn!();
+                          return;
+                        }
                         showModalBottomSheet(
                           context: context,
                           backgroundColor: Colors.blueGrey,
