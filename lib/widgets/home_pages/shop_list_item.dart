@@ -23,7 +23,7 @@ class ShopListItem extends StatelessWidget {
         margin: const EdgeInsets.only(left: 20, top: 20),
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: Colors.grey.withValues(alpha: 0.35),
+          color: Colors.blueGrey.withValues(alpha: 0.8),
           borderRadius: const BorderRadius.only(
             topRight: Radius.circular(30),
             topLeft: Radius.circular(8),

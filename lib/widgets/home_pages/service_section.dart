@@ -50,7 +50,10 @@ class ServiceSection extends StatelessWidget {
                 }
 
                 return const Center(
-                  child: Text("Will be Updated Soon"),
+                  child: Text(
+                    "Will be Updated Soon",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 );
               }),
         ),

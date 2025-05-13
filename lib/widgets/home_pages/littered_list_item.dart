@@ -42,7 +42,7 @@ class LitteredListItem extends StatelessWidget {
                         ? (apis.deviceWidth(context) / 1.10)
                         : apis.deviceWidth(context) / 2.5,
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(.10),
+                      color: Colors.white.withValues(alpha: 0.8),
                       borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(8),
                         topLeft: Radius.circular(8),

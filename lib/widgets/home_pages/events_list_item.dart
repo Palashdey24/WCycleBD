@@ -47,7 +47,7 @@ class EventsListItem extends ConsumerWidget {
                   ? (apis.deviceWidth(context) / 1)
                   : (apis.deviceWidth(context) / 1.7),
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(.10),
+                color: Colors.black.withValues(alpha: 0.9),
                 borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(8),
                   topLeft: Radius.circular(30),

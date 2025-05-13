@@ -51,14 +51,8 @@ class HomePage extends ConsumerWidget {
           },
         ),
         const Gap(10),
-        Container(
+        SizedBox(
           width: double.infinity,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(40),
-            ),
-          ),
           child: Column(
             spacing: normalGap,
             children: [

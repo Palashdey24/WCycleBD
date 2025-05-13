@@ -15,7 +15,7 @@ class SectionTopBar extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10, left: 10, bottom: 0),
           child: Text(
             stTxt,
-            style: theme.titleSmall!.copyWith(color: Colors.black87),
+            style: theme.titleSmall!.copyWith(color: Colors.white),
           ),
         ),
         const Spacer(),

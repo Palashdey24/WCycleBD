@@ -83,6 +83,7 @@ class ShopListItemInfo extends StatelessWidget {
                           overflow: TextOverflow.clip,
                           style: GoogleFonts.lato(
                             fontSize: 8,
+                            color: Colors.white,
                           ),
                         ),
                       ),

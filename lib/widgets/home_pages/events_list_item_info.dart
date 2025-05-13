@@ -38,11 +38,12 @@ class EventsListItemInfo extends StatelessWidget {
               Text(
                 textAlign: TextAlign.left,
                 softWrap: true,
-                maxLines: 4,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 eventList.eventsDescription!,
                 style: GoogleFonts.lato(
-                  fontSize: 8,
+                  fontSize: 10,
+                  color: Colors.white,
                 ),
               ),
               Row(
@@ -51,7 +52,8 @@ class EventsListItemInfo extends StatelessWidget {
                   Text(
                     textAlign: TextAlign.center,
                     eventList.eventsInterested!.toString(),
-                    style: themes.labelSmall,
+                    style:
+                        themes.labelSmall!.copyWith(color: Colors.deepOrange),
                   ),
                   IconButton(
                     icon: const Icon(
