@@ -25,74 +25,82 @@ class DetailsFrameOne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imageHeight = apis.deviceHeight(context) * 0.30;
-    return ListView(
+    return Stack(
       children: [
-        Container(
-          height: DeviceSize.getDeviceHeight(context),
-          decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-            Theme.of(context).scaffoldBackgroundColor,
-            Colors.green,
-          ], begin: Alignment.topCenter, end: Alignment.bottomLeft)),
-          child: Stack(
-            alignment: Alignment.topLeft,
-            children: [
-              ShaderMask(
-                shaderCallback: (Rect bounds) {
-                  return const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.white, Colors.white],
-                    stops: [0.0, 0.15, 1.0],
-                  ).createShader(bounds);
-                },
-                blendMode: BlendMode.dstIn,
-                child: SizedBox(
-                  height: imageHeight,
-                  width: double.infinity,
-                  child: FadeInImage.memoryNetwork(
-                      fit: BoxFit.cover,
-                      placeholder: kTransparentImage,
-                      image: stackImage),
-                ),
-              ),
-              Column(
+        ListView(
+          children: [
+            Container(
+              height: DeviceSize.getDeviceHeight(context),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                Theme.of(context).scaffoldBackgroundColor,
+                Colors.green,
+              ], begin: Alignment.topCenter, end: Alignment.bottomLeft)),
+              child: Stack(
+                alignment: Alignment.topLeft,
                 children: [
-                  Gap(imageHeight - 50),
-                  Expanded(
-                    child: Stack(
-                      clipBehavior: Clip.antiAlias,
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          child: Card(
-                            color: Colors.white,
-                            elevation: 10,
-                            margin: const EdgeInsets.only(top: 17),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(30)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: infoSections,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                            bottom: 5,
-                            child: SizedBox(
-                                width: apis.deviceWidth(context),
-                                child: bottomPosWidgets)),
-                      ],
+                  ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.white,
+                          Colors.white
+                        ],
+                        stops: [0.0, 0.15, 1.0],
+                      ).createShader(bounds);
+                    },
+                    blendMode: BlendMode.dstIn,
+                    child: SizedBox(
+                      height: imageHeight,
+                      width: double.infinity,
+                      child: FadeInImage.memoryNetwork(
+                          fit: BoxFit.cover,
+                          placeholder: kTransparentImage,
+                          image: stackImage),
                     ),
-                  )
+                  ),
+                  Column(
+                    children: [
+                      Gap(imageHeight - 50),
+                      Expanded(
+                        child: Stack(
+                          clipBehavior: Clip.antiAlias,
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: Card(
+                                color: Colors.white,
+                                elevation: 10,
+                                margin: const EdgeInsets.only(top: 17),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(30)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: infoSections,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                                bottom: 5,
+                                child: SizedBox(
+                                    width: apis.deviceWidth(context),
+                                    child: bottomPosWidgets)),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
-              const BackCustomButton(),
-            ],
-          ),
+            ),
+          ],
         ),
+        Positioned(top: 60, child: BackCustomButton())
       ],
     );
   }

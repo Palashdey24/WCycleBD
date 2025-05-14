@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:wcycle_bd/api/apis.dart';
+import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/model/event_model.dart';
 import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
+import 'package:wcycle_bd/provider/event_interest_data_provider.dart';
 import 'package:wcycle_bd/provider/indiviual_user_fs_provider.dart';
 import 'package:wcycle_bd/screen/ui_view/details/events_details.dart';
 import 'package:wcycle_bd/widgets/home_pages/even_date_show.dart';
@@ -34,17 +36,29 @@ class EventsListItem extends ConsumerWidget {
 
     return InkWell(
       onTap: () {
+        DialogsHelper.showProgressBar(context);
         ref
             .read(individualUserdataProvider.notifier)
             .intiValue(eventsModel.userId!)
             .whenComplete(
           () {
-            if (!context.mounted) return;
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EventsDetails(eventData: eventsModel),
-                ));
+            ref
+                .read(eventInterestUserProvider.notifier)
+                .eventInterestUserData(
+                  eventsModel.eventsId!,
+                )
+                .then(
+              (value) {
+                if (!context.mounted) return;
+                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EventsDetails(eventData: eventsModel),
+                    ));
+              },
+            );
           },
         );
       },

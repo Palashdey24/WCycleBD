@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 import 'package:wcycle_bd/provider/news_data.dart';
+import 'package:wcycle_bd/provider/users_fs_provider.dart';
 import 'package:wcycle_bd/widgets/home_pages/event_section.dart';
 import 'package:wcycle_bd/widgets/home_pages/littered_section.dart';
 import 'package:wcycle_bd/widgets/home_pages/recyclable_price_section.dart';
@@ -19,11 +20,12 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref
+        .read(currentUserdataProvider.notifier)
+        .intiValue(context, FirebaseAuth.instance.currentUser!.uid.toString());
+    ref.read(usersFsProviders.notifier).loadUsersAllData();
     final user = ref.watch(currentUserdataProvider);
     final newsData = ref.watch(newsFSProvider);
-    ref
-        .watch(currentUserdataProvider.notifier)
-        .intiValue(context, FirebaseAuth.instance.currentUser!.uid.toString());
 
     return ListView(
       physics: const BouncingScrollPhysics(),

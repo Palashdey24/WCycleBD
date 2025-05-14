@@ -36,18 +36,18 @@ class RecycleProductDetails extends ConsumerWidget {
         padding: EdgeInsets.all(8.0),
         child: ProductDetailsAddCart(),
       ),
-      body: ListView(
+      body: Stack(
         children: [
-          Container(
-            height: api.deviceHeight(context),
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              Theme.of(context).scaffoldBackgroundColor,
-              Colors.green,
-            ], begin: Alignment.topCenter, end: Alignment.bottomLeft)),
-            child: Stack(
-              children: [
-                Column(
+          ListView(
+            children: [
+              Container(
+                height: api.deviceHeight(context),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  Theme.of(context).scaffoldBackgroundColor,
+                  Colors.green,
+                ], begin: Alignment.topCenter, end: Alignment.bottomLeft)),
+                child: Column(
                   children: [
                     SizedBox(
                       height: api.deviceHeight(context) * 0.26,
@@ -138,10 +138,10 @@ class RecycleProductDetails extends ConsumerWidget {
                     )
                   ],
                 ),
-                const BackCustomButton(),
-              ],
-            ),
+              ),
+            ],
           ),
+          const Positioned(top: 60, child: BackCustomButton()),
         ],
       ),
     );

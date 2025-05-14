@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wcycle_bd/model/event_model.dart';
@@ -11,6 +12,7 @@ class EventsListItemInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themes = Theme.of(context).textTheme;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,12 +57,10 @@ class EventsListItemInfo extends StatelessWidget {
                     style:
                         themes.labelSmall!.copyWith(color: Colors.deepOrange),
                   ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.favorite,
-                      color: Colors.blue,
-                    ),
-                    onPressed: () {},
+                  const FaIcon(
+                    size: 15,
+                    FontAwesomeIcons.circleNodes,
+                    color: Colors.blue,
                   ),
                 ],
               )

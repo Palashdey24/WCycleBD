@@ -7,6 +7,7 @@ class Users {
       required this.birthDate,
       required this.email,
       this.doc,
+      this.userId,
       required this.individual,
       required this.userStatus});
   late final String phoneNumber;
@@ -17,9 +18,10 @@ class Users {
   late final String email;
   late final String? doc;
   late final bool? individual;
-  late final String userStatus;
+  late final String? userStatus;
+  String? userId;
 
-  Users.fromJson(Map<String, dynamic> json) {
+  Users.fromJson(Map<String, dynamic> json, {this.userId}) {
     phoneNumber = json['phoneNumber'] ?? "N?A";
     gender = json['gender'];
     imgUri = json['img_uri'];
