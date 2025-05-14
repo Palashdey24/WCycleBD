@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wcycle_bd/helper/device_size.dart';
+import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
+import 'package:wcycle_bd/model/event_interest_model.dart';
 import 'package:wcycle_bd/model/event_model.dart';
 import 'package:wcycle_bd/model/users.dart';
 import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
@@ -22,26 +25,75 @@ class EventsDetails extends ConsumerWidget {
 
   final EventModel eventData;
 
+  static void showInterestDialog(
+    BuildContext context,
+    List<Users> interestedUsersList,
+  ) {
+    if (interestedUsersList.isEmpty) {
+      DialogsHelper.showMessage(context, "No User Interested");
+      return;
+    }
+
+    showBottomSheet(
+      context: context,
+      backgroundColor: Colors.black,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(50))),
+      builder: (context) {
+        return Stack(
+          children: [
+            Container(
+                height: DeviceSize.getDeviceHeight(context) * 0.7,
+                padding: const EdgeInsets.only(top: 50),
+                child: ListView.builder(
+                  itemCount: interestedUsersList.length,
+                  padding: const EdgeInsets.only(bottom: 5),
+                  itemBuilder: (context, index) => EventInterestUserUi(
+                    user: interestedUsersList[index],
+                  ),
+                )),
+            Positioned(
+              top: 15,
+              left: 10,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: const FaIcon(
+                  FontAwesomeIcons.circleXmark,
+                  color: Colors.red,
+                  size: 25,
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    List<Users> interestedUsersList = [];
     final user = ref.read(currentUserdataProvider);
+    final usersData = ref.read(usersFsProviders);
+
+    void getInterestedUsers(EventInterestedModel eventInterested) {
+      if (eventInterested.interestedUsers != null) {
+        final interestedUsersID = eventInterested!.interestedUsers!;
+
+        for (var users in usersData) {
+          if (interestedUsersID.contains(users.userId)) {
+            interestedUsersList.add(users);
+          }
+        }
+      }
+    }
+
     return Scaffold(
       body: DetailsFrameOne(
           infoSections: Consumer(builder: (context, ref, child) {
             final interestData = ref.watch(eventInterestUserProvider);
-            List<Users> interestedUsersList = [];
 
-            final usersData = ref.read(usersFsProviders);
-
-            if (interestData.interestedUsers != null) {
-              final interestedUsersID = interestData!.interestedUsers!;
-
-              for (var users in usersData) {
-                if (interestedUsersID.contains(users.userId)) {
-                  interestedUsersList.add(users);
-                }
-              }
-            }
+            getInterestedUsers(interestData);
 
             return Column(
               mainAxisSize: MainAxisSize.max,
@@ -89,7 +141,8 @@ class EventsDetails extends ConsumerWidget {
                       style: fontHelpers.bodyMedium(context),
                     ),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () =>
+                            showInterestDialog(context, interestedUsersList),
                         child: Text("See All",
                             style: fontHelpers
                                 .bodyMedium(context)
@@ -116,8 +169,8 @@ class EventsDetails extends ConsumerWidget {
                               : interestedUsersList.sublist(0, 10).length,
                           padding: const EdgeInsets.only(bottom: 5),
                           itemBuilder: (context, index) => EventInterestUserUi(
-                            imageUrl: interestedUsersList[index].imgUri,
-                            userName: interestedUsersList[index].userName,
+                            user: interestedUsersList[index],
+                            colors: Colors.blueGrey.withValues(alpha: 0.1),
                           ),
                         ),
                       )
