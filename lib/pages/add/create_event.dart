@@ -94,7 +94,9 @@ class CreateEventsItem extends StatelessWidget {
                 (value) {
                   if (!context.mounted) return;
                   DialogsHelper.showMessage(context, "Data Added Successfully");
-                  Navigator.pop(context);
+                  Navigator.of(context)
+                    ..pop()
+                    ..pop();
                 },
               );
             },
@@ -168,6 +170,7 @@ class CreateEventsItem extends StatelessWidget {
                           }),
                       const Gap(csGap + 20),
                       TimeDateCollector(
+                        axisDirection: Axis.vertical,
                         onSelDate: (date) {
                           eventDate = date;
                         },

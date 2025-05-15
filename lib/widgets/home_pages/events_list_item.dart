@@ -65,6 +65,7 @@ class EventsListItem extends ConsumerWidget {
       child: Stack(
         children: [
           Container(
+              constraints: const BoxConstraints(minHeight: 200),
               margin: const EdgeInsets.only(left: 8, top: 5),
               clipBehavior: Clip.hardEdge,
               width: isVertical != null
@@ -90,7 +91,7 @@ class EventsListItem extends ConsumerWidget {
                   EvenDateShow(dmyTxt: dayMonth[1]),
                   EvenDateShow(dmyTxt: year),
                   if (user.individual == false)
-                    EvenDateShow(dmyTxt: isExpired.toString()),
+                    EvenDateShow(dmyTxt: isExpired ? "Expired" : "Active"),
                 ],
               )),
         ],

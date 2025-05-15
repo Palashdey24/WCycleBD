@@ -35,37 +35,39 @@ class LitteredSpotDetails extends ConsumerWidget {
               child: const Icon(Icons.add_circle),
             )
           : null,
-      body: DetailsFrameOne(
-          infoSections: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: normalGap,
-            children: [
-              DetailsUiKpi(
-                  kpiOneV: ltData.litteredTittle,
-                  kpiTwoV: fullAddress,
-                  kpiTVIcons: FontAwesomeIcons.addressBook,
-                  kpiThreeH: ltData.litteredImpactLevel),
-              WasteMaterialChips(ltWCat: ltData.litteredWasteMat),
-              Text(
-                "Recommendation",
-                style: fontHelpers.bodyMedium(context),
-              ),
-            ],
-          ),
-          bottomPosWidgets: user.individual == false
-              ? BottomFloatingWidgetLt(
-                  onCreateEvent: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreateEventsItem(
-                        litteredModel: ltData,
+      body: SafeArea(
+        child: DetailsFrameOne(
+            infoSections: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: normalGap,
+              children: [
+                DetailsUiKpi(
+                    kpiOneV: ltData.litteredTittle,
+                    kpiTwoV: fullAddress,
+                    kpiTVIcons: FontAwesomeIcons.addressBook,
+                    kpiThreeH: ltData.litteredImpactLevel),
+                WasteMaterialChips(ltWCat: ltData.litteredWasteMat),
+                Text(
+                  "Recommendation",
+                  style: fontHelpers.bodyMedium(context),
+                ),
+              ],
+            ),
+            bottomPosWidgets: user.individual == false
+                ? BottomFloatingWidgetLt(
+                    onCreateEvent: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CreateEventsItem(
+                          litteredModel: ltData,
+                        ),
                       ),
                     ),
-                  ),
-                )
-              : null,
-          stackImage: ltData.ltSrc),
+                  )
+                : null,
+            stackImage: ltData.ltSrc),
+      ),
     );
   }
 }

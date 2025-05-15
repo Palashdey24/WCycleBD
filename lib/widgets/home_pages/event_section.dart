@@ -16,14 +16,14 @@ class EventSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Future<QuerySnapshot<Map<String, dynamic>>> futureSnap =
-        FirebaseHelper.fireStore.collection('events').get();
-    Future<QuerySnapshot<Map<String, dynamic>>> futureOrganSnap = FirebaseHelper
+    Stream<QuerySnapshot<Map<String, dynamic>>> futureSnap =
+        FirebaseHelper.fireStore.collection('events').snapshots();
+    Stream<QuerySnapshot<Map<String, dynamic>>> futureOrganSnap = FirebaseHelper
         .fireStore
         .collection('events')
         .where("userId",
             isEqualTo: FirebaseHelper.firebaseAuth.currentUser!.uid)
-        .get();
+        .snapshots();
     List<EventModel> eventListData = [];
     final user = ref.read(currentUserdataProvider);
 
@@ -56,8 +56,8 @@ class EventSection extends ConsumerWidget {
                 ))),
         SizedBox(
           height: 200,
-          child: FutureBuilder(
-              future: user.individual == true ? futureSnap : futureOrganSnap,
+          child: StreamBuilder(
+              stream: user.individual == true ? futureSnap : futureOrganSnap,
               builder: (BuildContext context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:

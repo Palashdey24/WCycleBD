@@ -15,13 +15,15 @@ class TimeDateCollector extends StatefulWidget {
       this.timeTracker,
       this.lableColor,
       this.firstDates,
-      this.lastDates});
+      this.lastDates,
+      this.axisDirection});
   final void Function(String date) onSelDate;
   final void Function(String time)? onSelTime;
   final bool? timeTracker;
   final Color? lableColor;
   final DateTime? firstDates;
   final DateTime? lastDates;
+  final Axis? axisDirection;
 
   @override
   State<TimeDateCollector> createState() => _TimeDateCollectorState();
@@ -64,8 +66,9 @@ class _TimeDateCollectorState extends State<TimeDateCollector> {
       direction: Axis.horizontal,
       children: [
         Expanded(
-          child: Row(
+          child: Flex(
             mainAxisAlignment: MainAxisAlignment.center,
+            direction: widget.axisDirection ?? Axis.horizontal,
             children: [
               Text(
                 selectDate,
@@ -88,7 +91,8 @@ class _TimeDateCollectorState extends State<TimeDateCollector> {
         Visibility(
           visible: widget.timeTracker ?? true,
           child: Expanded(
-              child: Row(
+              child: Flex(
+            direction: widget.axisDirection ?? Axis.horizontal,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(

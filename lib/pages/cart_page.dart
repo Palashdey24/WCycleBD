@@ -19,7 +19,7 @@ class CartPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //* This function for load cart data from local database
     Future<List<LocalCartModel>?> loadCart =
-        ref.read(localCartIntiProvider.notifier).loadIntiCartData();
+        ref.watch(localCartIntiProvider.notifier).loadIntiCartData();
 
     Widget emptyCart = Center(
       child: Column(

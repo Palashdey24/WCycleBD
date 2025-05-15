@@ -4,13 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/firebase_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
-import 'package:wcycle_bd/pages/add/add_littered_spot_items.dart';
 import 'package:wcycle_bd/provider/event_interest_data_provider.dart';
 
 class ButtonsWidgetEvents extends ConsumerWidget {
   const ButtonsWidgetEvents({
     super.key,
+    this.eventInterestedFn,
   });
+
+  final void Function(bool isOnInterested, String? eventID)? eventInterestedFn;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -78,11 +80,8 @@ class ButtonsWidgetEvents extends ConsumerWidget {
           ),
           Expanded(
             child: ElevatedButton(
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddLitteredSpotItems(),
-                    )),
+                onPressed: () =>
+                    DialogsHelper.showMessage(context, "Under Progress"),
                 child: const Text("Donate")),
           ),
         ],

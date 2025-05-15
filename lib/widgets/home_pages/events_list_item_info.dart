@@ -48,6 +48,7 @@ class EventsListItemInfo extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
+              const Gap(2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

@@ -1,65 +1,50 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
-import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/users.dart';
+import 'package:wcycle_bd/provider/current_user_fs_provider.dart';
 
-class EventInterestUserUi extends StatelessWidget {
+class EventInterestUserUi extends ConsumerWidget {
   const EventInterestUserUi({super.key, this.colors, required this.user});
 
   final Color? colors;
   final Users user;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(currentUserdataProvider);
     return Container(
-      color: colors,
+      color: colors ?? Colors.white,
+      width: 150,
       padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       child: Flex(
-        direction: Axis.horizontal,
-        spacing: largeGap,
+        direction: Axis.vertical,
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 5,
         children: [
-          Expanded(
-            flex: 20,
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage: CachedNetworkImageProvider(user.imgUri),
-            ),
+          CircleAvatar(
+            radius: 20,
+            backgroundImage: CachedNetworkImageProvider(user.imgUri),
           ),
-          Expanded(
-            flex: 80,
-            child: Flex(
-              direction: Axis.vertical,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: csGap,
-              children: [
-                Flex(
-                    direction: Axis.horizontal,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        user.userName,
-                        style: FontHelper()
-                            .bodyMedium(context)
-                            .copyWith(color: Colors.blueGrey),
-                      ),
-                      if (user.individual != true)
-                        Text(
-                          user.gender,
-                          style: FontHelper()
-                              .bodySmall(context)
-                              .copyWith(color: Colors.orangeAccent),
-                        )
-                    ]),
-                if (user.individual != true)
-                  Text(user.phoneNumber,
-                      style: FontHelper()
-                          .bodyMedium(context)
-                          .copyWith(color: Colors.blueGrey)),
-              ],
-            ),
+          Text(
+            user.userName,
+            style: FontHelper()
+                .bodySmall(context)
+                .copyWith(color: Colors.blueGrey),
           ),
+          Text(
+            user.gender,
+            style: FontHelper()
+                .bodySmall(context)
+                .copyWith(color: Colors.orangeAccent),
+          ),
+          if (currentUser.individual == false || currentUser.individual == null)
+            Text(user.phoneNumber,
+                style: FontHelper()
+                    .bodySmall(context)
+                    .copyWith(color: Colors.blueGrey)),
         ],
       ),
     );

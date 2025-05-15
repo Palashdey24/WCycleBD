@@ -17,16 +17,15 @@ class InterestedUserProviderNotifier
         .get()
         .then(
       (value) {
-        if (value.exists) {
-          final interestedUserList =
-              EventInterestedModel.fromJson(value.data());
-          state = interestedUserList;
-          return true;
-        }
+        state = EventInterestedModel.fromJson(value.data());
+
+        return true;
       },
     ).onError(
       (error, stackTrace) {
         log("error: $error");
+        state = EventInterestedModel(
+            eventsId: eventId, eventsInterested: 0, interestedUsers: []);
         return false;
       },
     );

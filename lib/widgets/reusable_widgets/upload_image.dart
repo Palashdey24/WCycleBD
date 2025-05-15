@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wcycle_bd/helper/firebase_helper.dart';
 import 'package:wcycle_bd/helper/image_picker_helper.dart';
@@ -101,23 +100,23 @@ class _UploadImageState extends State<UploadImage> {
               maxRadius: widget.radius ?? 70,
               child: const LoadingWidgets(),
             )
-          : CircleAvatar(
-              radius: widget.radius ?? 70,
-              backgroundColor: Colors.black26,
+          : Card(
+              shape: const CircleBorder(),
+              color: Colors.black26,
+              clipBehavior: Clip.hardEdge,
               child: uploadUri == null
                   ? widget.preImage == null
-                      ? FaIcon(
-                          FontAwesomeIcons.cloudArrowUp,
-                          color: Colors.lightGreen.shade500,
-                          size: widget.radius ?? 65,
+                      ? Image.asset(
+                          "assets/upload-avater.png",
+                          width: 100,
+                          height: 100,
                         )
-                      : ClipOval(
-                          child: Image.network(
+                      : Image.network(
                           widget.preImage!,
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
-                        ))
+                        )
                   : imageProvider,
             ),
     );

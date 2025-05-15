@@ -23,72 +23,76 @@ class DetailsUiKpi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Flex(
-          direction: Axis.horizontal,
-          children: [
-            Expanded(
-              flex: 60,
-              child: Text(
-                kpiOneV,
-                style: fontHelpers.bodyMedium(context).copyWith(),
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flex(
+            direction: Axis.horizontal,
+            children: [
+              Expanded(
+                flex: 60,
+                child: Text(
+                  kpiOneV,
+                  style: fontHelpers.bodyMedium(context).copyWith(),
+                ),
+              ),
+              Expanded(
+                flex: 40,
+                child: kpiThVIcons == null
+                    ? Text(
+                        textAlign: TextAlign.right,
+                        kpiThreeH.toUpperCase(),
+                        style: fontHelpers.bodyMedium(context).copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          FaIcon(
+                            kpiThVIcons,
+                            size: 20,
+                            color: Colors.blue,
+                          ),
+                          const Gap(5),
+                          Text(
+                            kpiThreeH.toUpperCase(),
+                            style: fontHelpers
+                                .bodyMedium(context)
+                                .copyWith(color: Colors.blueAccent),
+                          ),
+                        ],
+                      ),
+              ),
+            ],
+          ),
+          const Gap(normalGap),
+          if (kpiTVIcons != null)
+            ListTile(
+              leading: FaIcon(
+                kpiTVIcons,
+                size: 20,
+                color: kDefaultColor,
+              ),
+              title: Text(
+                kpiTwoV,
+                style: fontHelpers.bodyMedium(context).copyWith(
+                      color: Colors.blue,
+                    ),
               ),
             ),
-            Expanded(
-              flex: 40,
-              child: kpiThVIcons == null
-                  ? Text(
-                      textAlign: TextAlign.right,
-                      kpiThreeH.toUpperCase(),
-                      style: fontHelpers.bodyMedium(context).copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer),
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        FaIcon(
-                          kpiThVIcons,
-                          size: 20,
-                          color: Colors.blue,
-                        ),
-                        const Gap(5),
-                        Text(
-                          kpiThreeH.toUpperCase(),
-                          style: fontHelpers
-                              .bodyMedium(context)
-                              .copyWith(color: Colors.blueAccent),
-                        ),
-                      ],
-                    ),
-            ),
-          ],
-        ),
-        const Gap(normalGap),
-        if (kpiTVIcons != null)
-          ListTile(
-            leading: FaIcon(
-              kpiTVIcons,
-              size: 20,
-              color: kDefaultColor,
-            ),
-            title: Text(
+          if (kpiTVIcons == null)
+            Text(
               kpiTwoV,
               style: fontHelpers
                   .bodyMedium(context)
-                  .copyWith(color: Colors.indigo),
+                  .copyWith(color: Colors.blueAccent),
             ),
-          ),
-        if (kpiTVIcons == null)
-          Text(
-            kpiTwoV,
-            style: fontHelpers
-                .bodyMedium(context)
-                .copyWith(color: Colors.blueAccent),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }
