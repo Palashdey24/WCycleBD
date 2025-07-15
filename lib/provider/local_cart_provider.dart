@@ -14,6 +14,7 @@ class LocalCartIntiProviderNotifier
     final cartDatabase = await db.query("carts");
 
     if (cartDatabase.isEmpty) {
+      state = [];
       return null;
     }
     final cartData = cartDatabase.map((e) {

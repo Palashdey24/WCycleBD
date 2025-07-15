@@ -50,7 +50,7 @@ class RecyclableListItem extends ConsumerWidget {
                   height: 120,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(colors: [
-                      Colors.yellowAccent.withOpacity(0.4),
+                      Colors.yellowAccent.withValues(alpha: 0.4),
                       Colors.blueGrey,
                     ], begin: Alignment.topRight, end: Alignment.bottomLeft),
                     borderRadius: const BorderRadius.only(

@@ -2,15 +2,15 @@ import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wcycle_bd/data/model/remote/recycle_product_model.dart';
+import 'package:wcycle_bd/model/cart_order_model.dart';
 import 'package:wcycle_bd/model/local_cart_model.dart';
-import 'package:wcycle_bd/model/order_model.dart';
 
-class OrderCookiesNotifierProvider extends StateNotifier<List<OrderModel>> {
+class OrderCookiesNotifierProvider extends StateNotifier<List<CartOrderModel>> {
   OrderCookiesNotifierProvider() : super([]);
 
   //* This function help to found the index of the store in the orderList
   int? indexCheck(String storeId) {
-    List<OrderModel> orderList = state;
+    List<CartOrderModel> orderList = state;
     int? index;
     orderList.any((element) {
       if (element.storeId == storeId) {
@@ -24,7 +24,7 @@ class OrderCookiesNotifierProvider extends StateNotifier<List<OrderModel>> {
   }
 
   Future<double> saveOrder(LocalCartModel localCart, int quantity) async {
-    List<OrderModel> orderList = state;
+    List<CartOrderModel> orderList = state;
     int? index;
 
     index = indexCheck(
@@ -49,11 +49,12 @@ class OrderCookiesNotifierProvider extends StateNotifier<List<OrderModel>> {
       state = orderList;
       return updatedPrice;
     } else {
-      orderList.add(OrderModel(
+      orderList.add(CartOrderModel(
           storeId: localCart.storeId,
           totalPrice: (localCart.quantity * recycleProduct.productPrice),
           status: "initials",
-          products: [recycleProduct]));
+          products: [recycleProduct],
+          storeName: localCart.recycleShopModel!.storeName));
 
       state = orderList;
 
@@ -71,7 +72,7 @@ class OrderCookiesNotifierProvider extends StateNotifier<List<OrderModel>> {
     int? index;
     int productIndex;
 
-    List<OrderModel> orderList = state;
+    List<CartOrderModel> orderList = state;
     index = indexCheck(
       storeId,
     );
@@ -102,11 +103,12 @@ class OrderCookiesNotifierProvider extends StateNotifier<List<OrderModel>> {
 
       return updatedOrderPriceBtm;
     }
+    return null;
   }
 
   Future<double> removeOrder(RecycleProductModel recycleProduct) async {
     int? index;
-    List<OrderModel> orderList = state;
+    List<CartOrderModel> orderList = state;
     index = indexCheck(
       recycleProduct.shopID,
     );
@@ -136,7 +138,7 @@ class OrderCookiesNotifierProvider extends StateNotifier<List<OrderModel>> {
 }
 
 final orderCookiesProvider =
-    StateNotifierProvider<OrderCookiesNotifierProvider, List<OrderModel>>(
+    StateNotifierProvider<OrderCookiesNotifierProvider, List<CartOrderModel>>(
         (ref) {
   return OrderCookiesNotifierProvider();
 });

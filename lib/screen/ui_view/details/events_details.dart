@@ -130,7 +130,7 @@ class EventsDetails extends ConsumerWidget {
                   log("interestData: ${interestData.interestedUsers?.length}");
 
                   if (interestData.interestedUsers != null) {
-                    final interestedUsersID = interestData!.interestedUsers!;
+                    final interestedUsersID = interestData.interestedUsers!;
 
                     for (var users in usersData) {
                       if (interestedUsersID.contains(users.userId)) {

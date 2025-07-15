@@ -6,7 +6,9 @@ import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/local_cart_model.dart';
 import 'package:wcycle_bd/provider/local_cart_provider.dart';
-import 'package:wcycle_bd/provider/provider_scope/cartListItemProvider.dart';
+import 'package:wcycle_bd/provider/provider_scope/cart_list_Item_provider.dart';
+import 'package:wcycle_bd/provider/select_address_provider.dart';
+import 'package:wcycle_bd/provider/user_address_provider.dart';
 import 'package:wcycle_bd/screen/ui_view/shimmer/recycle_shimmer.dart';
 import 'package:wcycle_bd/widgets/cart_page/bottom_cart_price_ui.dart';
 import 'package:wcycle_bd/widgets/cart_page/cart_list_item.dart';
@@ -19,7 +21,20 @@ class CartPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //* This function for load cart data from local database
     Future<List<LocalCartModel>?> loadCart =
-        ref.watch(localCartIntiProvider.notifier).loadIntiCartData();
+        ref.read(localCartIntiProvider.notifier).loadIntiCartData();
+
+    // ? This is for future use. So address configure for order can be work smoothly
+    final userAddress = ref.read(userAddressDataProvider);
+    final defaultAddress = userAddress
+        .where(
+          (element) => element.isDefault == true,
+        )
+        .first;
+    ref
+        .read(selectedAddressProvider.notifier)
+        .updateSelectedAddress(defaultAddress);
+
+    // ? Code end here
 
     Widget emptyCart = Center(
       child: Column(

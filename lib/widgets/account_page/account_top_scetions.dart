@@ -6,6 +6,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/model/account_option_model.dart';
+import 'package:wcycle_bd/pages/address_book_page.dart';
 import 'package:wcycle_bd/pages/home_page.dart';
 import 'package:wcycle_bd/pages/order_page.dart';
 import 'package:wcycle_bd/pages/profile_page.dart';
@@ -36,10 +37,16 @@ class AccountTopScetions extends ConsumerWidget {
           iconData: FontAwesomeIcons.usersRectangle,
           btWidgets: const ProfilePage()),
       AccountOptionModel(
-          optionLabel: "Address",
-          iconColors: Colors.blueAccent,
-          iconData: FontAwesomeIcons.addressBook,
-          btWidgets: const HomePage()),
+        optionLabel: "Address",
+        iconColors: Colors.blueAccent,
+        iconData: FontAwesomeIcons.addressBook,
+        btFn: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AddressBookPage(),
+          ),
+        ),
+      ),
       AccountOptionModel(
           optionLabel: "Setting",
           iconColors: Colors.grey,

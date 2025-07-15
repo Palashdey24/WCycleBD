@@ -31,7 +31,7 @@ class LtShimmer extends StatelessWidget {
                         ? (apis.deviceWidth(context) / 1.10)
                         : apis.deviceWidth(context) / 2.5,
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(.10),
+                      color: Colors.grey.withValues(alpha: .10),
                       borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(8),
                         topLeft: Radius.circular(8),

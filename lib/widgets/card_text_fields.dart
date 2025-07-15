@@ -8,11 +8,14 @@ class CardTextFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.green.shade100,
+      color: Theme.of(context).colorScheme.onPrimary,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20))),
       elevation: 8,
-      child: cardWidegts,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: cardWidegts,
+      ),
     );
   }
 }

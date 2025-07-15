@@ -80,7 +80,7 @@ class CartItemRecycleInfo extends ConsumerWidget {
         if (selectCart) {
           //* also updated the total price in provider
           ref
-              .read(orderCookiesProvider.notifier)
+              .watch(orderCookiesProvider.notifier)
               .updateQuantity(
                   isPlus: false,
                   productID: recycleProductModel!.productID,
@@ -88,7 +88,7 @@ class CartItemRecycleInfo extends ConsumerWidget {
                   quantity: cartQuantity!)
               .then(
                 (value) => ref
-                    .read(totalPriceProvider.notifier)
+                    .watch(totalPriceProvider.notifier)
                     .updateTotalPrice(value!),
               );
         }
@@ -169,7 +169,7 @@ class CartItemRecycleInfo extends ConsumerWidget {
                               recycleProductModel!.productID, context);
                           if (selectCart) {
                             ref
-                                .read(orderCookiesProvider.notifier)
+                                .watch(orderCookiesProvider.notifier)
                                 .removeOrder(recycleProductModel!);
                           }
                         },

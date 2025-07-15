@@ -20,6 +20,7 @@ class CreateEventsItem extends StatelessWidget {
     if (value == null || value.trim().isEmpty || value.trim().length < 3) {
       return failurMsg;
     }
+    return null;
   }
 
   @override

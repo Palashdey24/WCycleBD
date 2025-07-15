@@ -6,6 +6,7 @@ import 'package:wcycle_bd/model/users.dart';
 class Apis {
   final firebaseAuth = FirebaseAuth.instance;
   final fireStore = FirebaseFirestore.instance;
+  static const String googleMapKey = "AIzaSyBCdMD9ZALTAo5sAtmhBM50PI-lWb_uq1E";
 
   double deviceWidth(BuildContext context) {
     return MediaQuery.sizeOf(context).width;

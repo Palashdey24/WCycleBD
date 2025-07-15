@@ -40,7 +40,7 @@ class FormTextOutlined extends StatelessWidget {
       enabled: isEnable,
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.grey.withOpacity(.1),
+        fillColor: Colors.grey.withValues(alpha: .1),
         counterText: maxLen == null ? '' : null,
         prefixIcon: Icon(
           iconData,

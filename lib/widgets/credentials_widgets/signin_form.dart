@@ -6,7 +6,7 @@ import 'package:wcycle_bd/helper/dialogs_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/screen/splash_screen.dart';
 import 'package:wcycle_bd/widgets/card_text_fields.dart';
-import 'package:wcycle_bd/widgets/form_text_texts.dart';
+import 'package:wcycle_bd/widgets/form_simple_texts.dart';
 
 class SigninForm extends StatelessWidget {
   const SigninForm({super.key});
@@ -84,25 +84,25 @@ class SigninForm extends StatelessWidget {
               ),
               const Gap(csGap),
               CardTextFields(
-                cardWidegts: FormTextTexts(
+                cardWidegts: FormSimpleTexts(
                   txtInType: TextInputType.emailAddress,
                   labelTxt: "Email",
                   hint: "Please enter a valid email",
                   icons: Icons.email,
                   iconCol: Colors.blueGrey,
                   onSave: (value) => emailTxt = value,
-                  vaildator: (value) => emailVaildator(value),
+                  validator: (value) => emailVaildator(value),
                 ),
               ),
               const Gap(10),
               CardTextFields(
-                  cardWidegts: FormTextTexts(
+                  cardWidegts: FormSimpleTexts(
                 txtInType: TextInputType.visiblePassword,
                 labelTxt: "Password",
                 hint: "Please enter at last 8 char Password",
                 icons: Icons.password_rounded,
                 iconCol: Colors.blueGrey,
-                vaildator: (value) => passwordVaildator(value),
+                validator: (value) => passwordVaildator(value),
                 obscure: true,
                 onSave: (value) {
                   password = value;

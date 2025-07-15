@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/widgets/card_text_fields.dart';
-import 'package:wcycle_bd/widgets/form_text_texts.dart';
+import 'package:wcycle_bd/widgets/form_simple_texts.dart';
 
 class EssentialRegForm extends StatelessWidget {
   const EssentialRegForm(
@@ -24,14 +24,14 @@ class EssentialRegForm extends StatelessWidget {
     return Column(
       children: [
         CardTextFields(
-          cardWidegts: FormTextTexts(
+          cardWidegts: FormSimpleTexts(
             txtInType: TextInputType.text,
             labelTxt: "Full Name",
             hint: "Please enter your Name",
             icons: Icons.text_rotation_angleup_rounded,
             iconCol: Colors.blueGrey,
             onSave: onSaveName,
-            vaildator: (value) {
+            validator: (value) {
               if (value == null ||
                   value.trim().isEmpty ||
                   value.trim().length < 4) {
@@ -43,7 +43,7 @@ class EssentialRegForm extends StatelessWidget {
         ),
         const Gap(normalGap),
         CardTextFields(
-          cardWidegts: FormTextTexts(
+          cardWidegts: FormSimpleTexts(
               txtInType: TextInputType.emailAddress,
               atCorrect: false,
               enSuggest: false,
@@ -52,7 +52,7 @@ class EssentialRegForm extends StatelessWidget {
               icons: Icons.email,
               iconCol: Colors.blueGrey,
               onSave: onSaveEmail,
-              vaildator: (value) {
+              validator: (value) {
                 if (value == null ||
                     value.trim().isEmpty ||
                     value.trim().length < 4 ||
@@ -66,7 +66,7 @@ class EssentialRegForm extends StatelessWidget {
         ),
         const Gap(normalGap),
         CardTextFields(
-            cardWidegts: FormTextTexts(
+            cardWidegts: FormSimpleTexts(
           txtInType: TextInputType.number,
           maxLen: 13,
           intial: "880",
@@ -74,7 +74,7 @@ class EssentialRegForm extends StatelessWidget {
           hint: "Please enter Phone Number number",
           icons: Icons.phone_android,
           iconCol: Colors.blueGrey,
-          vaildator: (value) {
+          validator: (value) {
             if (value == null ||
                 value.trim().isEmpty ||
                 value.trim().length < 11) {
@@ -86,13 +86,13 @@ class EssentialRegForm extends StatelessWidget {
         )),
         const Gap(normalGap),
         CardTextFields(
-            cardWidegts: FormTextTexts(
+            cardWidegts: FormSimpleTexts(
           txtInType: TextInputType.visiblePassword,
           labelTxt: "Password",
           hint: "Please enter at last 8 char Password",
           icons: Icons.password_rounded,
           iconCol: Colors.blueGrey,
-          vaildator: (value) {
+          validator: (value) {
             if (value == null ||
                 value.trim().isEmpty ||
                 value.trim().length < 8) {
@@ -106,13 +106,13 @@ class EssentialRegForm extends StatelessWidget {
         )),
         const Gap(normalGap),
         CardTextFields(
-          cardWidegts: FormTextTexts(
+          cardWidegts: FormSimpleTexts(
             txtInType: TextInputType.visiblePassword,
             labelTxt: "Retype Password",
             hint: "Please enter at last 8 char Password",
             icons: Icons.password_rounded,
             iconCol: Colors.blueGrey,
-            vaildator: (value) {
+            validator: (value) {
               if (value != userPassword) {
                 return "Password Not Match";
               }

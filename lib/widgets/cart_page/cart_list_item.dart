@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
 import 'package:wcycle_bd/provider/order_cookies_provider.dart';
-import 'package:wcycle_bd/provider/provider_scope/cartListItemProvider.dart';
+import 'package:wcycle_bd/provider/provider_scope/cart_list_Item_provider.dart';
 import 'package:wcycle_bd/widgets/cart_page/cart_item_recycle_info.dart';
 
 final fontHelpers = FontHelper();
@@ -55,7 +55,7 @@ class CartListItem extends ConsumerWidget {
                         //* For adding the order data to provider for future use
                         selected
                             ? ref
-                                .read(orderCookiesProvider.notifier)
+                                .watch(orderCookiesProvider.notifier)
                                 .saveOrder(carts, carts.quantity)
                                 .then(
                                 (value) {
@@ -65,12 +65,12 @@ class CartListItem extends ConsumerWidget {
                                 },
                               )
                             : ref
-                                .read(orderCookiesProvider.notifier)
+                                .watch(orderCookiesProvider.notifier)
                                 .removeOrder(carts.recycleProductModel!)
                                 .then(
                                 (value) {
                                   ref
-                                      .read(totalPriceProvider.notifier)
+                                      .watch(totalPriceProvider.notifier)
                                       .updateTotalPrice(value);
                                 },
                               );
