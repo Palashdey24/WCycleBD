@@ -1,9 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wcycle_bd/helper/device_size.dart';
 import 'package:wcycle_bd/helper/dialogs_helper.dart';
+import 'package:wcycle_bd/helper/font_helper.dart';
 import 'package:wcycle_bd/helper/pre_style.dart';
+import 'package:wcycle_bd/pages/address_book_page.dart';
 import 'package:wcycle_bd/provider/order_cookies_provider.dart';
+import 'package:wcycle_bd/provider/select_address_provider.dart';
+import 'package:wcycle_bd/provider/user_address_provider.dart';
 import 'package:wcycle_bd/widgets/order_configure/order_configure.dart';
 
 import '../../screen/ui_view/details/littered_spot_details.dart';
@@ -15,10 +20,69 @@ class BottomCartPriceUi extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // ? This is for future use. So address configure for order can be work smoothly
+    final userAddress = ref.watch(userAddressDataProvider);
+    final defaultAddress = userAddress
+        .where(
+          (element) => element.isDefault == true,
+        )
+        .firstOrNull;
+
+    // ? Code end here
+
+    void defaultAddressNullDialog() {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Default Address Not Found",
+                style: FontHelper()
+                    .bodyMedium(context)
+                    .copyWith(color: Colors.red)),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Cancel",
+                    style: FontHelper().bodySmall(context),
+                  )),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AddressBookPage(),
+                        ));
+                  },
+                  child: Text(
+                    "Okay",
+                    style: FontHelper().bodySmall(context),
+                  )),
+            ],
+            content: Text(
+              "Please add or Make a default address",
+              style: FontHelper().bodySmall(context),
+            ),
+          );
+        },
+      );
+    }
+
     void onCheckOut() {
       final orderDataList = ref.read(orderCookiesProvider);
 
       if (orderDataList.isNotEmpty) {
+        if (defaultAddress == null) {
+          defaultAddressNullDialog();
+          return;
+        }
+
+        ref
+            .read(selectedAddressProvider.notifier)
+            .updateSelectedAddress(defaultAddress!);
         Navigator.push(
             context,
             MaterialPageRoute(

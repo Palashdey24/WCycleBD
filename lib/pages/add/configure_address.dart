@@ -54,9 +54,10 @@ class ConfigureAddress extends ConsumerWidget {
     final fsRef = FirebaseHelper.fireStore.collection("userAddress");
 
     //* Default check and updated in separated Function
-    await defaultUpdate(
+    final defaultChange = await defaultUpdate(
         context: context, currentDefault: addressData['isDefault']);
 
+    if (defaultChange == false) return;
     await fsRef.doc(address!.addressID).update(addressData).then(
       (value) {
         ref.read(userAddressDataProvider.notifier).fetchData();
@@ -77,7 +78,7 @@ class ConfigureAddress extends ConsumerWidget {
     return;
   }
 
-  Future<void> defaultUpdate(
+  Future<bool?> defaultUpdate(
       {required BuildContext context, bool? currentDefault}) async {
     final fsRef = FirebaseHelper.fireStore.collection("userAddress");
     final oldDefault = await fsRef
@@ -85,22 +86,30 @@ class ConfigureAddress extends ConsumerWidget {
         .where("userId", isEqualTo: FirebaseHelper.userId)
         .get();
 
-    if (!context.mounted) return;
+    if (!context.mounted) return null;
 
-    if (currentDefault == true && oldDefault.docs.isNotEmpty) {
+    if (oldDefault.docs.isNotEmpty) {
       String oldDefaultAddressId = oldDefault.docs[0].id;
-      final fsRef = FirebaseHelper.fireStore
-          .collection("userAddress")
-          .doc(oldDefaultAddressId);
 
-      fsRef.update({
-        "isDefault": false,
-      }).catchError((error) {
-        if (!context.mounted) return;
-        DialogsHelper.showMessage(context, "Something went wrong");
+      if (address != null && oldDefaultAddressId == address!.addressID) {
+        DialogsHelper.showMessage(
+            context, "Please choose another address as default");
         Navigator.pop(context);
-        return;
-      });
+        return false;
+      } else if (currentDefault == true) {
+        final fsRef = FirebaseHelper.fireStore
+            .collection("userAddress")
+            .doc(oldDefaultAddressId);
+
+        fsRef.update({
+          "isDefault": false,
+        }).catchError((error) {
+          if (!context.mounted) return;
+          DialogsHelper.showMessage(context, "Something went wrong");
+          Navigator.pop(context);
+          return;
+        });
+      }
     }
   }
 
